@@ -1,0 +1,2530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>NoorChat — Reminders, lectures and halal business</title>
+<meta name="theme-color" content="#08332A" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Figtree:wght@400;500;600;700&family=Reem+Kufi:wght@500;600;700&display=swap" rel="stylesheet">
+<script>
+  // Apply saved theme before paint (nc_theme)
+  (function () {
+    try {
+      var t = localStorage.getItem('nc_theme');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark');
+    } catch (e) {}
+  })();
+</script>
+<style>
+:root{
+  --paper:#EAF0EB; --surface:#FFFFFF; --surface-2:#F3F7F4;
+  --ink:#0F2A22; --ink-2:#435B51; --ink-3:#63796F;
+  --line:#D2DDD5; --line-strong:#B4C5BA;
+  --emerald:#0E5A43; --emerald-soft:#DCEAE2;
+  --btn-bg:#0E5A43; --btn-fg:#FFFFFF;
+  --gold:#C6962B; --gold-text:#7A5809; --gold-soft:#F4E8C6; --gold-btn-fg:#1E1503;
+  --danger:#B3372B; --danger-soft:#F8E1DE;
+  --niche-1:#0F5C45; --niche-2:#08332A; --on-niche:#F4EBCB; --gold-lit:#EFC964;
+  --tile:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 24 24'%3E%3Cpath d='M12 1L16 5H19V8L23 12L19 16V19H16L12 23L8 19H5V16L1 12L5 8V5H8Z' fill='none' stroke='%230E5A43' stroke-opacity='.07' stroke-width='.4'/%3E%3C/svg%3E");
+  --tile-niche:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24'%3E%3Cpath d='M12 1L16 5H19V8L23 12L19 16V19H16L12 23L8 19H5V16L1 12L5 8V5H8Z' fill='none' stroke='%23EFC964' stroke-opacity='.13' stroke-width='.4'/%3E%3C/svg%3E");
+  --arch-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath d='M0 100V46C0 26 30 12 50 0C70 12 100 26 100 46V100Z'/%3E%3C/svg%3E");
+  --f-display:'Reem Kufi','Segoe UI',system-ui,sans-serif;
+  --f-body:'Figtree','Segoe UI',system-ui,-apple-system,sans-serif;
+  --f-ar:'Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif;
+  --shadow:0 10px 30px -18px rgba(8,51,42,.45);
+}
+html.dark{
+  --paper:#061418; --surface:#0C2227; --surface-2:#102A30;
+  --ink:#E6EFEA; --ink-2:#AABDB3; --ink-3:#86998F;
+  --line:#1C3A40; --line-strong:#2C525A;
+  --emerald:#4CC29A; --emerald-soft:#0F3A33;
+  --btn-bg:#4CC29A; --btn-fg:#04231B;
+  --gold:#E0B54C; --gold-text:#E8C160; --gold-soft:#3A3013; --gold-btn-fg:#1E1503;
+  --danger:#F29288; --danger-soft:#3A1B18;
+  --niche-1:#0B4A3B; --niche-2:#05231D;
+  --tile:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 24 24'%3E%3Cpath d='M12 1L16 5H19V8L23 12L19 16V19H16L12 23L8 19H5V16L1 12L5 8V5H8Z' fill='none' stroke='%23E0B54C' stroke-opacity='.06' stroke-width='.4'/%3E%3C/svg%3E");
+  --shadow:0 10px 30px -18px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper) var(--tile);color:var(--ink);font:15px/1.5 var(--f-body);min-height:100vh;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+input,textarea,select{font:inherit;color:inherit}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ico{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ico.fill{fill:currentColor;stroke:none}
+.ico.sm{width:18px;height:18px}
+.col{max-width:600px;margin:0 auto;padding:0 14px}
+.muted{color:var(--ink-3)}
+.small{font-size:13px}
+
+/* ---------- Buttons & fields ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border-radius:12px;background:var(--btn-bg);color:var(--btn-fg);font-weight:600;transition:transform .12s,opacity .12s}
+.btn:active{transform:scale(.98)}
+.btn[disabled]{opacity:.55;cursor:default}
+.btn.block{width:100%}
+.btn.gold{background:var(--gold);color:var(--gold-btn-fg)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line-strong)}
+.btn.danger{background:var(--danger-soft);color:var(--danger)}
+.btn.sm{min-height:34px;padding:0 14px;font-size:13px;border-radius:10px}
+.icon-btn{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:50%;color:var(--ink-2)}
+.icon-btn:hover{background:var(--emerald-soft)}
+.field{display:block;margin-bottom:12px}
+.field>span{display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:4px}
+.input,.textarea,.select{width:100%;padding:11px 13px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);outline:none}
+.input:focus,.textarea:focus,.select:focus{border-color:var(--emerald)}
+.textarea{resize:vertical;min-height:88px;line-height:1.5}
+.avatar{display:inline-grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;background:var(--emerald);color:#fff;font-family:var(--f-display);font-weight:600;font-size:17px;overflow:hidden;position:relative}
+html.dark .avatar{background:var(--niche-1);color:var(--gold-lit)}
+.avatar.lg{width:84px;height:84px;font-size:36px;border:4px solid var(--paper)}
+.avatar.sm{width:32px;height:32px;font-size:14px}
+.avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%}
+.p-meta{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:8px;font-size:13px;color:var(--ink-2)}
+.p-meta span{display:inline-flex;align-items:center;gap:4px}
+
+/* ---------- Top bar & tab bar ---------- */
+.topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0)}
+.topbar .col{height:56px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:700;font-size:21px;letter-spacing:.2px;color:var(--emerald)}
+html.dark .brand{color:var(--gold-lit)}
+.brand .ico{width:26px;height:26px;color:var(--gold)}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0)}
+.tabbar .col{display:flex;justify-content:space-around;align-items:flex-end;height:60px}
+.tab{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 14px;color:var(--ink-3);font-size:11px;font-weight:600;min-width:64px}
+.tab[aria-current="page"]{color:var(--emerald)}
+html.dark .tab[aria-current="page"]{color:var(--gold-lit)}
+.tab[aria-current="page"]::before{content:"";position:absolute;top:0;left:50%;width:18px;height:7px;transform:translateX(-50%);background:var(--gold);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.tab.create{padding:0;min-width:64px}
+.tab.create .star{position:relative;display:grid;place-items:center;width:56px;height:56px;margin-bottom:6px;color:var(--gold)}
+.tab.create .star svg.bg{position:absolute;inset:0;width:100%;height:100%;fill:currentColor;filter:drop-shadow(0 6px 8px rgba(8,51,42,.35))}
+.tab.create .star svg.plus{position:relative;width:22px;height:22px;stroke:var(--gold-btn-fg);stroke-width:2.4}
+.tab.create[aria-current="page"]::before{display:none}
+main{padding-bottom:96px;min-height:70vh}
+
+/* ---------- Home: greeting + compact mihrab ---------- */
+.greet{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:0 10px;padding:8px 2px 6px}
+.greet h1{font-family:var(--f-display);font-weight:600;font-size:15.5px;line-height:1.3}
+.greet .hijri{font-size:12px;color:var(--gold-text);font-weight:600;white-space:nowrap}
+.mihrab{position:relative;isolation:isolate;padding:40px 24px 10px;color:var(--on-niche);text-align:center}
+.mihrab-fill{position:absolute;inset:0;z-index:-1;background:var(--tile-niche),radial-gradient(120% 70% at 50% 0%,var(--niche-1),var(--niche-2));-webkit-mask:var(--arch-mask) center/100% 100% no-repeat;mask:var(--arch-mask) center/100% 100% no-repeat}
+.mihrab-line{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;overflow:visible}
+.mihrab-line path{fill:none;stroke:var(--gold);vector-effect:non-scaling-stroke}
+.mihrab-line .o{stroke-width:2.5}
+.mihrab-line .i{stroke-width:1;stroke-opacity:.7}
+.lamp{position:absolute;top:3px;left:50%;transform:translateX(-50%);width:20px;color:var(--gold-lit)}
+.hero-tools{position:absolute;right:18px;top:58px}
+.hero-tools .icon-btn,.sun-links .icon-btn{width:30px;height:30px;color:var(--gold-lit)}
+.hero-tools .icon-btn:hover,.sun-links .icon-btn:hover{background:rgba(239,201,100,.15)}
+.reminder-ar{font-family:var(--f-ar);font-size:clamp(21px,6vw,27px);line-height:1.65;color:var(--gold-lit);text-wrap:balance;padding:0 28px}
+.reminder-ar.long{font-size:clamp(17px,4.8vw,21px);line-height:1.75}
+.reminder-en{margin-top:2px;padding:0 6px;font-size:13.5px;line-height:1.4;opacity:.94;text-wrap:balance;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.reminder-ref{font-size:12px;color:var(--gold-lit);font-weight:600;white-space:nowrap}
+.link-btn{white-space:nowrap;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--gold-lit);padding:6px 4px}
+.link-btn:hover{text-decoration:underline}
+.link-btn.dark{color:var(--emerald)}
+html.dark .link-btn.dark{color:var(--gold-lit)}
+.sun-block{margin-top:6px;padding-top:4px;border-top:1px solid rgba(239,201,100,.28)}
+.sun-head{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left}
+.sun-next{font-family:var(--f-display);font-size:16px;font-weight:600;color:var(--gold-lit);line-height:1.2;white-space:nowrap}
+.sun-place{font-family:var(--f-body);font-size:11.5px;font-weight:500;opacity:.75}
+.sun-links{display:flex;align-items:center}
+.arc{display:block;width:100%;height:auto;margin-top:2px;overflow:visible}
+.arc .horizon{stroke:rgba(244,235,203,.3);stroke-width:1;stroke-dasharray:3 4}
+.arc .path{fill:none;stroke:var(--gold-lit);stroke-opacity:.55;stroke-width:1.4}
+.arc .node{fill:var(--niche-2);stroke:var(--gold-lit);stroke-width:1.5}
+.arc .node.done{fill:var(--gold-lit)}
+.sun{transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+.sun .core{fill:var(--gold-lit)}
+.sun .glow{fill:var(--gold-lit);opacity:.22}
+.prayers{display:grid;grid-template-columns:repeat(5,1fr);text-align:center;font-size:11.5px;line-height:1.3}
+.prayers b{display:block;font-weight:600}
+.prayers span{opacity:.8;font-size:11px;white-space:nowrap}
+.prayers .is-next{color:var(--gold-lit)}
+.prayers .is-next span{opacity:1}
+.mihrab-base{height:5px;margin:10px -24px -12px;background:var(--gold);opacity:.9}
+.hero-mini{display:flex;align-items:center;gap:10px;padding:8px 6px 8px 14px;border-radius:14px;color:var(--on-niche);background:var(--tile-niche),linear-gradient(160deg,var(--niche-1),var(--niche-2));border:1px solid var(--gold)}
+.hero-mini .ico{width:18px;height:18px;color:var(--gold-lit)}
+.hero-mini b{font-family:var(--f-display);font-size:15px;font-weight:600;color:var(--gold-lit);flex:1}
+.hero-mini .icon-btn{width:34px;height:34px;color:var(--gold-lit)}
+
+/* ---------- Composer + status cards (Facebook-style) ---------- */
+.compose{display:flex;align-items:center;gap:10px;margin:12px -14px 0;padding:10px 14px;background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.compose .say{flex:1;padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);color:var(--ink-3);font-size:15px}
+.compose .icon-btn{color:var(--emerald)}
+html.dark .compose .icon-btn{color:var(--gold-lit)}
+.tray{display:flex;gap:8px;overflow-x:auto;margin:0 -14px;padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--line);scrollbar-width:none}
+.tray::-webkit-scrollbar{display:none}
+.scard{position:relative;flex:none;width:98px;height:160px;border-radius:14px;overflow:hidden;color:#fff;text-align:left;background:linear-gradient(160deg,var(--niche-1),var(--niche-2));border:1px solid var(--line)}
+.scard .s-bg{position:absolute;inset:0}
+.scard .s-bg img,.scard .s-bg video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.scard::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(rgba(0,0,0,.3),transparent 35%,transparent 55%,rgba(0,0,0,.68))}
+.s-av{position:absolute;top:8px;left:8px;z-index:2;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--emerald);font-family:var(--f-display);font-weight:600;font-size:15px;color:#fff;box-shadow:0 0 0 2.5px var(--gold)}
+.scard.seen .s-av{box-shadow:0 0 0 2.5px var(--line-strong)}
+.s-name{position:absolute;left:8px;right:8px;bottom:8px;z-index:2;font-size:12.5px;font-weight:700;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.s-text{position:absolute;inset:0;padding:48px 8px 40px;display:grid;place-items:center;text-align:center;font-size:12.5px;line-height:1.4;color:var(--gold-lit);overflow:hidden;background:var(--tile-niche)}
+.scard.add{background:var(--surface);color:var(--ink)}
+.scard.add::after{display:none}
+.scard.add .top{position:absolute;inset:0 0 auto 0;height:66%;display:grid;place-items:center;font-family:var(--f-display);font-size:38px;color:var(--gold-lit);background:var(--tile-niche),linear-gradient(160deg,var(--niche-1),var(--niche-2))}
+.scard.add .plus{position:absolute;left:50%;top:66%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:var(--gold-btn-fg);box-shadow:0 0 0 3px var(--surface)}
+.scard.add .lbl{position:absolute;left:0;right:0;bottom:10px;text-align:center;font-size:12.5px;font-weight:700}
+
+/* ---------- Filter chips ---------- */
+.chips{display:flex;gap:8px;padding:14px 0 6px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:8px 16px;border-radius:999px;font-weight:600;font-size:13.5px;color:var(--ink-2);border:1.5px solid var(--line)}
+.chip[aria-pressed="true"]{background:var(--btn-bg);border-color:var(--btn-bg);color:var(--btn-fg)}
+
+/* ---------- Feed cards ---------- */
+/* ---------- Feed cards (edge-to-edge, Facebook-style) ---------- */
+.gap{height:8px;margin:0 -14px;background:var(--paper)}
+.card{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 -14px;overflow:hidden}
+.grid2 .card,.sheet-body .card{margin:0;border:1px solid var(--line);border-radius:16px}
+.byline{display:flex;align-items:center;gap:10px;padding:12px 14px 8px}
+.byline .who{flex:1;min-width:0}
+.byline .nm{display:flex;align-items:baseline;gap:6px;min-width:0}
+.byline b{display:block;font-weight:700;font-size:15px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.byline .dot{color:var(--ink-3)}
+.follow-link{font-weight:700;font-size:14.5px;color:var(--emerald);white-space:nowrap}
+html.dark .follow-link{color:var(--gold-lit)}
+.byline time{font-size:12.5px;color:var(--ink-3)}
+.copy{padding:2px 14px 12px;white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere;line-height:1.55;font-size:15.5px}
+.media{position:relative;background:var(--surface-2);display:block;width:100%}
+.media img,.media video{display:block;width:100%;height:auto;max-height:80vh;object-fit:contain;background:#000}
+.media.missing{padding:34px 16px;text-align:center;font-size:13px;color:var(--ink-3)}
+.counts{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;font-size:14px;color:var(--ink-3)}
+.counts .c-l{display:flex;align-items:center;gap:6px}
+.counts .em{font-size:16px;line-height:1}
+.counts .c-r{color:inherit}
+.counts .c-r:hover{text-decoration:underline}
+.actions{display:flex;border-top:1px solid var(--line);padding:2px 6px}
+.act{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;border-radius:12px;font-size:14.5px;font-weight:600;color:var(--ink-2)}
+.act:hover{background:var(--emerald-soft)}
+.act.on{color:var(--emerald)}
+html.dark .act.on{color:var(--gold-lit)}
+.act .hands{font-size:18px;line-height:1;filter:grayscale(1) opacity(.55)}
+.act.on .hands{filter:none}
+.quote{margin:0 14px 12px;padding:12px 14px;border:1px solid var(--line);border-inline-start:3px solid var(--gold);border-radius:12px;background:var(--surface-2)}
+.quote b{font-size:13.5px}
+.quote .copy{padding:4px 0 0;font-size:14px}
+.quote .media{margin-top:8px;border-radius:8px;overflow:hidden}
+.comments{border-top:1px solid var(--line);padding:12px 14px;background:var(--surface-2)}
+.cmt{font-size:14px;margin-bottom:10px}
+.cmt b{font-weight:700}
+.cmt .meta{font-size:12px;color:var(--ink-3);margin-top:1px}
+.cmt .meta button{font-weight:600;color:var(--emerald);margin-inline-start:8px}
+html.dark .cmt .meta button{color:var(--gold-lit)}
+.cmt.reply{margin-inline-start:22px;padding-inline-start:10px;border-inline-start:2px solid var(--line)}
+.composer{display:flex;gap:8px;margin-top:6px}
+.composer .input{padding:9px 12px}
+.replying{font-size:12px;color:var(--ink-3);margin-top:6px}
+.replying button{color:var(--danger);font-weight:600;margin-inline-start:6px}
+
+/* Reels */
+.reel .media{aspect-ratio:9/14;max-height:74vh;background:#000}
+.reel .media video{height:100%;max-height:none;object-fit:cover}
+.reel-cap{position:absolute;left:0;right:0;bottom:0;padding:44px 16px 14px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.72));font-size:14.5px;pointer-events:none}
+.reel-views{display:block;font-size:12.5px;opacity:.85;margin-top:4px}
+.reel-sound{position:absolute;right:12px;top:12px;width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;display:grid;place-items:center}
+.reel-empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:#fff;background:linear-gradient(160deg,var(--niche-1),var(--niche-2))}
+
+/* Products */
+.p-img{position:relative;aspect-ratio:4/3;background:var(--tile-niche),linear-gradient(160deg,var(--niche-1),var(--niche-2));display:grid;place-items:center;color:var(--gold-lit);overflow:hidden}
+.p-img img{width:100%;height:100%;object-fit:cover}
+.p-body{padding:12px 14px 14px}
+.p-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.p-title{font-weight:700;line-height:1.3}
+.price{font-family:var(--f-display);font-weight:700;font-size:18px;color:var(--gold-text);white-space:nowrap}
+.p-desc{font-size:13.5px;color:var(--ink-2);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.p-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}
+.p-foot small{color:var(--ink-3);font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.aff-note{font-size:11.5px;color:var(--ink-3);margin-top:8px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.grid2 .p-foot{flex-direction:column;align-items:stretch}
+.grid2 .p-top{flex-direction:column;gap:2px}
+.grid2 .btn{width:100%}
+
+.empty{text-align:center;padding:44px 20px;color:var(--ink-3)}
+.empty svg{width:34px;height:34px;color:var(--gold);margin-bottom:8px}
+.empty p{margin-bottom:14px}
+.end-note{display:flex;justify-content:center;padding:26px 0 8px;color:var(--gold)}
+
+.p-menu{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.45);color:#fff;width:36px;height:36px}
+.p-menu:hover{background:rgba(0,0,0,.65)}
+.drop:focus-within{outline:2px solid var(--gold);outline-offset:2px}
+a.opt{text-decoration:none;color:inherit}
+
+/* ---------- Reels carousel on Home + fullscreen viewer ---------- */
+.rrow{margin:0 -14px;background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0 14px}
+.rrow-head{display:flex;align-items:center;justify-content:space-between;padding:0 14px 8px}
+.rrow-head h2{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-size:18px;font-weight:600}
+.rrow-scroll{display:flex;gap:8px;overflow-x:auto;padding:0 14px;scroll-padding-inline:14px;scroll-snap-type:x proximity;scrollbar-width:none}
+.rrow-scroll::-webkit-scrollbar{display:none}
+.rcard{position:relative;flex:none;width:54vw;max-width:230px;aspect-ratio:9/16;border-radius:14px;overflow:hidden;color:#fff;text-align:left;scroll-snap-align:start;background:linear-gradient(160deg,var(--niche-1),var(--niche-2))}
+.rc-bg{position:absolute;inset:0}
+.rc-bg video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.rc-empty{width:100%;height:100%;display:grid;place-items:center;color:var(--gold-lit);background:var(--tile-niche)}
+.rc-empty .ico{width:34px;height:34px}
+.rcard::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(rgba(0,0,0,.25),transparent 30%,transparent 50%,rgba(0,0,0,.72))}
+.rc-cap{position:absolute;left:10px;right:10px;bottom:30px;z-index:2;font-size:13.5px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rc-views{position:absolute;left:10px;bottom:9px;z-index:2;display:flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600}
+#reelview{position:fixed;inset:0;z-index:65;background:#000;color:#fff}
+#rv-list{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior:contain;scrollbar-width:none}
+#rv-list::-webkit-scrollbar{display:none}
+.rv-item{position:relative;height:100%;scroll-snap-align:start;scroll-snap-stop:always;background:#000;display:grid;place-items:center}
+.rv-video{width:100%;height:100%;object-fit:contain;background:#000}
+.rv-hit{position:absolute;inset:0;z-index:1}
+.rv-empty{text-align:center;padding:24px;color:var(--gold-lit)}
+.rv-empty .ico{width:40px;height:40px}
+.rv-info{position:absolute;left:0;right:64px;bottom:0;z-index:2;padding:40px 16px calc(env(safe-area-inset-bottom,0) + 20px);background:linear-gradient(transparent,rgba(0,0,0,.75));pointer-events:none}
+.rv-info b{display:block;font-size:15px}
+.rv-info p{font-size:14px;margin-top:2px}
+.rv-info small{opacity:.8}
+.rv-rail{position:absolute;right:8px;bottom:calc(env(safe-area-inset-bottom,0) + 24px);z-index:3;display:flex;flex-direction:column;gap:14px;align-items:center}
+.rv-rail .rb{display:grid;justify-items:center;gap:2px;width:48px;font-size:12px;font-weight:600;color:#fff}
+.rv-rail .rb .c{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.5);font-size:22px}
+.rv-rail .rb{text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.rv-rail .rb.on .c{background:var(--gold)}
+.rv-top{position:absolute;top:calc(env(safe-area-inset-top,0) + 8px);left:8px;right:8px;z-index:3;display:flex;justify-content:space-between}
+.rv-top .icon-btn{background:rgba(0,0,0,.45);color:#fff}
+
+/* ---------- Sheets ---------- */
+.backdrop{position:fixed;inset:0;z-index:70;background:rgba(3,20,16,.6);display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:var(--surface);border-radius:24px 24px 0 0;padding-bottom:env(safe-area-inset-bottom,0);animation:rise .22s cubic-bezier(.2,.8,.2,1)}
+@keyframes rise{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.sheet-head{position:sticky;top:0;z-index:2;background:var(--surface);display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px 20px;border-bottom:1px solid var(--line)}
+.sheet-head h2{font-family:var(--f-display);font-size:19px;font-weight:600}
+.sheet-body{padding:16px 20px 22px}
+@media(min-width:640px){.backdrop{align-items:center}.sheet{border-radius:24px}}
+.notice{display:flex;gap:10px;padding:12px 14px;border-radius:14px;background:var(--gold-soft);color:var(--ink);font-size:13px;line-height:1.45;margin-bottom:14px;border:1px solid color-mix(in srgb,var(--gold) 45%,transparent)}
+.notice .ico{color:var(--gold-text);margin-top:1px}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:4px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line);margin-bottom:14px}
+.seg button{padding:9px 4px;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--ink-2);text-align:center}
+.seg button[aria-selected="true"]{background:var(--btn-bg);color:var(--btn-fg)}
+.drop{display:grid;place-items:center;gap:6px;text-align:center;padding:24px 16px;border:2px dashed var(--line-strong);border-radius:16px;color:var(--ink-2);cursor:pointer;margin-bottom:12px;transition:border-color .15s,background .15s}
+.drop:hover,.drop.over{border-color:var(--emerald);background:var(--emerald-soft)}
+.drop .ico{width:30px;height:30px;color:var(--emerald)}
+html.dark .drop .ico{color:var(--gold-lit)}
+.drop b{font-size:14.5px}
+.drop small{color:var(--ink-3)}
+.preview{position:relative;margin-bottom:12px;border-radius:16px;overflow:hidden;background:#000}
+.preview img,.preview video{display:block;width:100%;max-height:300px;object-fit:contain}
+.preview .rm{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;display:grid;place-items:center}
+.preview-info{font-size:12.5px;color:var(--ink-3);margin:-4px 0 12px}
+.busy-bar{height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin-bottom:12px}
+.busy-bar i{display:block;height:100%;width:40%;background:var(--gold);animation:slide 1s linear infinite}
+@keyframes slide{from{transform:translateX(-100%)}to{transform:translateX(260%)}}
+.meter{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin:6px 0 10px}
+.meter i{display:block;height:100%;background:var(--gold)}
+.list-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.list-row:last-child{border-bottom:0}
+.list-row .grow{flex:1;min-width:0}
+.list-row .grow p{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.opt{display:flex;align-items:center;gap:12px;width:100%;padding:14px 4px;border-bottom:1px solid var(--line);font-weight:600}
+.opt:last-child{border-bottom:0}
+.opt .ico{color:var(--emerald)}
+html.dark .opt .ico{color:var(--gold-lit)}
+.opt.bad{color:var(--danger)}
+.opt.bad .ico{color:var(--danger)}
+.pt-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)}
+.pt-row.next{color:var(--gold-text);font-weight:700}
+.toggle{display:flex;gap:6px;margin:10px 0}
+.toggle button{flex:1;padding:9px;border-radius:10px;border:1.5px solid var(--line);font-weight:600;font-size:13.5px;text-align:center}
+.toggle button[aria-pressed="true"]{background:var(--btn-bg);border-color:var(--btn-bg);color:var(--btn-fg)}
+
+/* ---------- Story viewer ---------- */
+#story{position:fixed;inset:0;z-index:60;background:#000;color:#fff;display:flex;flex-direction:column;align-items:center}
+.st-wrap{position:relative;width:100%;max-width:520px;height:100%;display:flex;flex-direction:column}
+.st-bars{display:flex;gap:4px;padding:calc(env(safe-area-inset-top,0) + 10px) 12px 8px}
+.st-bars i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.3);overflow:hidden}
+.st-bars i b{display:block;height:100%;width:0;background:var(--gold-lit)}
+.st-bars i.done b{width:100%}
+.st-head{display:flex;align-items:center;gap:10px;padding:4px 12px 8px}
+.st-head .who{flex:1;min-width:0;line-height:1.25}
+.st-head small{opacity:.75}
+.st-stage{position:relative;flex:1;min-height:0;display:grid;place-items:center}
+.st-stage img,.st-stage video{max-width:100%;max-height:100%;object-fit:contain}
+.st-text{width:100%;height:100%;display:grid;place-items:center;padding:36px;text-align:center;font-family:var(--f-ar),var(--f-body);font-size:26px;line-height:1.7;background:var(--tile-niche),linear-gradient(160deg,var(--niche-1),var(--niche-2));color:var(--gold-lit)}
+.st-cap{padding:12px 20px calc(env(safe-area-inset-bottom,0) + 16px);text-align:center;font-size:15px;min-height:56px}
+.st-hit{position:absolute;top:0;bottom:0;width:34%;z-index:2}
+.st-hit.l{left:0}.st-hit.r{right:0;width:66%}
+.st-tools{position:absolute;right:10px;bottom:70px;z-index:3;display:flex;flex-direction:column;gap:10px}
+.st-tools .icon-btn{background:rgba(255,255,255,.14);color:#fff}
+.st-tools .on{background:var(--gold);color:#1E1503}
+.st-head .icon-btn{color:#fff}
+
+/* ---------- Profile ---------- */
+.banner{height:110px;border-radius:0 0 22px 22px;background:var(--tile-niche),linear-gradient(160deg,var(--niche-1),var(--niche-2));margin:0 -14px}
+.p-head{margin-top:-42px;padding:0 4px}
+.p-head h1{font-family:var(--f-display);font-size:24px;font-weight:600;margin-top:8px;line-height:1.2}
+.p-head .bio{color:var(--ink-2);margin-top:2px}
+.counts{display:flex;gap:22px;margin:12px 0}
+.counts b{font-family:var(--f-display);font-size:18px;display:block;line-height:1.1}
+.counts span{font-size:12.5px;color:var(--ink-3)}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--gold-soft);color:var(--gold-text);vertical-align:middle;margin-inline-start:6px}
+.badge.plain{background:var(--surface-2);color:var(--ink-3);border:1px solid var(--line)}
+.tabs{scroll-margin-top:64px;display:flex;gap:2px;border-bottom:1px solid var(--line);margin:16px 0 16px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;white-space:nowrap;padding:10px 12px;font-weight:600;color:var(--ink-3);border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--emerald);border-color:var(--gold)}
+html.dark .tabs button[aria-selected="true"]{color:var(--gold-lit)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
+.panel h2{font-family:var(--f-display);font-size:18px;font-weight:600;margin-bottom:4px}
+.upgrade{background:var(--tile-niche),linear-gradient(160deg,var(--niche-1),var(--niche-2));color:var(--on-niche);border:0}
+.upgrade h2{color:var(--gold-lit)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.stat{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:12px 10px;text-align:center}
+.stat b{display:block;font-family:var(--f-display);font-size:21px;line-height:1.15}
+.stat.gold b{color:var(--gold-text)}
+.stat span{font-size:12px;color:var(--ink-3)}
+.head-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 2px 12px}
+.head-row h1{font-family:var(--f-display);font-size:23px;font-weight:600}
+
+
+/* ---------- Monetization ---------- */
+.mon-status{border:1.5px solid var(--gold)}
+.check{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+.check:last-of-type{border-bottom:0}
+.check .mark{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line-strong);color:transparent;margin-top:1px}
+.check .mark .ico{width:14px;height:14px;stroke-width:3}
+.check.ok .mark{background:var(--emerald);border-color:var(--emerald);color:#fff}
+html.dark .check.ok .mark{color:#04231B}
+.check .grow{flex:1;min-width:0}
+.check .top{display:flex;justify-content:space-between;gap:10px;font-weight:600;font-size:14.5px}
+.check .top span:last-child{color:var(--ink-3);font-weight:500;white-space:nowrap}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:7px}
+.bar i{display:block;height:100%;background:var(--gold)}
+.check.ok .bar i{background:var(--emerald)}
+.rules{padding-left:20px;margin:10px 0 0;color:var(--ink-2);font-size:14px}
+.rules li{margin-bottom:8px}
+.checkbox{display:flex;gap:10px;align-items:flex-start;margin:10px 0;font-size:14.5px}
+.checkbox input{flex:none;width:20px;height:20px;margin-top:2px;accent-color:var(--emerald)}
+
+/* ---------- Admin ---------- */
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:700;background:var(--emerald-soft);color:var(--emerald)}
+html.dark .tag{color:var(--gold-lit)}
+.tag.warn{background:var(--gold-soft);color:var(--gold-text)}
+.tag.bad{background:var(--danger-soft);color:var(--danger)}
+.row-actions{display:flex;gap:6px;flex-wrap:wrap}
+.filters{display:flex;gap:8px;margin-bottom:10px}
+.filters .input{flex:1}
+.filters .select{width:auto}
+.scroll-box{max-height:420px;overflow:auto}
+
+/* ---------- Auth ---------- */
+.auth{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 16px 32px}
+.auth .mihrab{width:100%;max-width:420px;padding:96px 24px 30px}
+.auth .brand-big{font-family:var(--f-display);font-size:34px;font-weight:700;color:var(--gold-lit);line-height:1.1}
+.auth .tagline{margin-top:8px;font-size:15px;opacity:.92;text-wrap:balance}
+.auth-card{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:16px;box-shadow:var(--shadow)}
+.auth-card .seg{grid-template-columns:1fr 1fr}
+.demo-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.demo-row button{flex:1;padding:9px 10px;border-radius:10px;border:1.5px dashed var(--line-strong);font-size:12.5px;font-weight:600;color:var(--ink-2);text-align:center}
+.policy{max-width:420px;margin-top:14px;text-align:center;font-size:12.5px;color:var(--ink-3)}
+
+#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0));transform:translateX(-50%);z-index:80;max-width:min(92vw,460px);padding:12px 18px;border-radius:14px;background:var(--niche-2);color:var(--on-niche);border:1px solid var(--gold);font-size:14px;font-weight:600;box-shadow:0 12px 30px -10px rgba(0,0,0,.5);animation:rise .2s ease-out}
+@media(min-width:900px){.col{max-width:640px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 1L16 5H19V8L23 12L19 16V19H16L12 23L8 19H5V16L1 12L5 8V5H8Z"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l1 12H4L5 8z"/><path d="M9 8V6a3 3 0 016 0v2"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-comment" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5z"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M5 13v7h14v-7"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></symbol>
+    <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M21 16l-5-5-8 8"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 19h14"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 15A8 8 0 019 4a8 8 0 1011 11z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/></symbol>
+    <symbol id="i-vol" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9c1.5 1.5 1.5 4.5 0 6"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9l4 6M21 9l-4 6"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11a7 7 0 10-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 00-14-4L4 9"/><path d="M4 4v5h5"/><path d="M4 13a8 8 0 0014 4l2-2"/><path d="M20 20v-5h-5"/></symbol>
+    <symbol id="i-wa" viewBox="0 0 24 24"><path d="M4 20l1.3-4.2A8 8 0 118 19l-4 1z"/><path d="M9 9c0 3 3 6 6 6l1-1.5-2-1-1 .8c-1-.4-2-1.400-2.400-2.400l.8-1-1-2L9 9z"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3L3 11l7 2 2 7 9-17z"/><path d="M10 13l11-10"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></symbol>
+    <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.500 8h7M8.500 11.500h7M9.500 8c4.500 0 4.500 6 0 6h-.5l5 3.500"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.500l4.500 4.500L19 7.500"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+    <symbol id="i-reel" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M3 9h18M9 3l3 6M15 3l3 6"/><path d="M10.500 13v5l4.500-2.500z"/></symbol>
+    <symbol id="i-chev-up" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></symbol>
+    <symbol id="i-chev-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-repost" viewBox="0 0 24 24"><path d="M17 3l4 4-4 4"/><path d="M3 11V9a2 2 0 012-2h16"/><path d="M7 21l-4-4 4-4"/><path d="M21 13v2a2 2 0 01-2 2H3"/></symbol>
+    <symbol id="i-group" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><circle cx="16.5" cy="9.5" r="2.5"/><path d="M2.5 19c0-3.2 2.8-5.5 6.5-5.5s6.5 2.3 6.5 5.5"/><path d="M15 19c0-2 1.5-3.5 4-3.8"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-10a4.5 4.5 0 018-2.8A4.5 4.5 0 0119 10c0 5.5-7 10-7 10z"/></symbol>
+  </defs>
+</svg>
+
+<!-- ============ AUTH ============ -->
+<div id="auth" class="auth">
+  <div class="mihrab">
+    <div class="mihrab-fill"></div>
+    <svg class="mihrab-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path class="o" d="M0 100V46C0 26 30 12 50 0C70 12 100 26 100 46V100"/><path class="i" d="M3.500 100V47C3.500 30 31 17 50 5.500C69 17 96.500 30 96.500 47V100"/></svg>
+    <svg class="lamp" viewBox="0 0 34 70" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M17 0v22"/><path d="M13 22h8l-1.500 4h-5z" fill="currentColor"/><path d="M9 30c0-3 3.500-4 8-4s8 1 8 4c0 6-3 11-8 11s-8-5-8-11z" fill="currentColor" fill-opacity=".18"/><path d="M14 41l3 5 3-5"/><circle cx="17" cy="48.500" r="1.600" fill="currentColor"/></svg>
+    <p class="brand-big">NoorChat</p>
+    <p class="tagline">Reminders, lectures and halal business. Nothing else.</p>
+  </div>
+
+  <div class="auth-card">
+    <div class="seg" role="tablist" aria-label="Sign in or register">
+      <button id="tab-login" role="tab" aria-selected="true" data-act="auth-tab" data-tab="login">Log in</button>
+      <button id="tab-register" role="tab" aria-selected="false" data-act="auth-tab" data-tab="register">Create account</button>
+    </div>
+
+    <form id="login-form" autocomplete="on">
+      <label class="field"><span>Email</span><input class="input" id="login-email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+      <label class="field"><span>Password</span><input class="input" id="login-password" type="password" required autocomplete="current-password" placeholder="Your password"></label>
+      <button class="btn block" type="submit">Log in</button>
+      <div class="demo-row">
+        <button type="button" data-act="demo-fill" data-email="creator@noorchat.com" data-pass="demo123">Try as creator</button>
+        <button type="button" data-act="demo-fill" data-email="admin@noorchat.com" data-pass="admin123">Try as admin</button>
+      </div>
+    </form>
+
+    <form id="register-form" autocomplete="on" hidden>
+      <label class="field"><span>Full name</span><input class="input" id="reg-name" type="text" required maxlength="60" autocomplete="name" placeholder="Your name"></label>
+      <label class="field"><span>Email</span><input class="input" id="reg-email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+      <label class="field"><span>Password</span><input class="input" id="reg-password" type="password" required minlength="6" autocomplete="new-password" placeholder="At least 6 characters"></label>
+      <button class="btn block" type="submit">Create account</button>
+    </form>
+  </div>
+  <p class="policy">Strictly for authentic Islamic content, reminders, and halal business. Inappropriate media will result in immediate account ban.</p>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" hidden>
+  <header class="topbar">
+    <div class="col">
+      <div class="brand"><svg class="ico fill" aria-hidden="true"><use href="#i-star"/></svg>NoorChat</div>
+      <div style="display:flex;align-items:center;gap:4px">
+        <button class="icon-btn" data-act="mon-open" aria-label="Monetization"><svg class="ico" aria-hidden="true"><use href="#i-coin"/></svg></button>
+        <button class="icon-btn" data-act="theme" aria-label="Switch light or dark mode"><svg class="ico" id="theme-ico" aria-hidden="true"><use href="#i-moon"/></svg></button>
+        <button class="avatar sm" id="nav-avatar" data-act="account-menu" aria-label="Account menu">U</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main"></main>
+
+  <nav class="tabbar" aria-label="Main">
+    <div class="col">
+      <button class="tab" data-act="nav" data-page="home"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg>Home</button>
+      <button class="tab" data-act="nav" data-page="store"><svg class="ico" aria-hidden="true"><use href="#i-bag"/></svg>Store</button>
+      <button class="tab create" data-act="create" aria-label="Create something">
+        <span class="star"><svg class="bg" aria-hidden="true"><use href="#i-star"/></svg><svg class="ico plus" aria-hidden="true"><use href="#i-plus"/></svg></span>
+      </button>
+      <button class="tab" data-act="nav" data-page="profile"><svg class="ico" aria-hidden="true"><use href="#i-user"/></svg>Profile</button>
+      <button class="tab" id="admin-tab" data-act="nav" data-page="admin" hidden><svg class="ico" aria-hidden="true"><use href="#i-shield"/></svg>Admin</button>
+    </div>
+  </nav>
+</div>
+
+<!-- ============ SHEET (generic bottom sheet) ============ -->
+<div id="sheet" class="backdrop" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="sheet-head"><h2 id="sheet-title"></h2><button class="icon-btn" data-act="close-sheet" aria-label="Close"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+    <div class="sheet-body" id="sheet-body"></div>
+  </div>
+</div>
+
+<!-- ============ STORY VIEWER ============ -->
+<div id="story" hidden role="dialog" aria-modal="true" aria-label="Status viewer">
+  <div class="st-wrap">
+    <div class="st-bars" id="st-bars"></div>
+    <div class="st-head">
+      <span class="avatar sm" id="st-avatar">U</span>
+      <div class="who"><b id="st-name"></b> <small id="st-time"></small></div>
+      <button class="icon-btn" id="st-del" data-act="story-delete" aria-label="Delete this status" hidden><svg class="ico" aria-hidden="true"><use href="#i-trash"/></svg></button>
+      <button class="icon-btn" data-act="story-close" aria-label="Close status"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="st-stage" id="st-stage">
+      <button class="st-hit l" data-act="story-prev" aria-label="Previous"></button>
+      <button class="st-hit r" data-act="story-next" aria-label="Next"></button>
+      <div id="st-media" style="width:100%;height:100%;display:grid;place-items:center"></div>
+      <div class="st-tools">
+        <button class="icon-btn" id="st-like" data-act="story-like" aria-label="Say Ameen"><span style="font-size:20px">🤲</span></button>
+        <button class="icon-btn" id="st-dl" data-act="story-download" aria-label="Download" hidden><svg class="ico" aria-hidden="true"><use href="#i-download"/></svg></button>
+        <button class="icon-btn" id="st-report" data-act="story-report" aria-label="Report" hidden><svg class="ico" aria-hidden="true"><use href="#i-flag"/></svg></button>
+      </div>
+    </div>
+    <p class="st-cap" id="st-cap"></p>
+  </div>
+</div>
+
+<!-- ============ REEL VIEWER (fullscreen, swipe up/down) ============ -->
+<div id="reelview" hidden role="dialog" aria-modal="true" aria-label="Reels">
+  <div class="rv-top"><button class="icon-btn" data-act="rv-close" aria-label="Close reels"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button><button class="icon-btn" id="rv-sound" data-act="rv-sound" aria-label="Sound on or off"><svg class="ico" aria-hidden="true"><use href="#i-vol"/></svg></button></div>
+  <div id="rv-list"></div>
+</div>
+
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<script>
+'use strict';
+/* =====================================================================
+   NoorChat — single-file prototype (works offline, no build step)
+   Data lives in this browser: text in localStorage, photos/videos in IndexedDB.
+   ===================================================================== */
+
+/* ---------- Config ---------- */
+const CONFIG = {
+  // Leave '' to run fully in the browser. Set to your Worker URL to push media to Cloudflare R2
+  // (needs a token in localStorage 'nc_token' — see README "Connect the frontend to the Worker").
+  API_BASE: ''
+};
+const FREE_PRODUCTS = 3, PREMIUM_PRODUCTS = 40, PREMIUM_PRICE = 199, RPM_INR = 20, MAX_FAVORITES = 5;
+const MEDIA_LIMITS = { imageMaxDim: 1600, videoMaxMB: 250, maxSec: { post: 600, reel: 180, status: 60, product: 0 } };
+const POLICY = 'Strictly for authentic Islamic content, reminders, and halal business. Inappropriate media will result in immediate account ban.';
+
+const REMINDERS = [
+  { ar: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا', en: 'Indeed, with hardship comes ease.', ref: "Qur'an 94:6" },
+  { ar: 'فَاذْكُرُونِي أَذْكُرْكُمْ', en: 'So remember Me; I will remember you.', ref: "Qur'an 2:152" },
+  { ar: 'أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ', en: 'Surely, in the remembrance of Allah do hearts find rest.', ref: "Qur'an 13:28" },
+  { ar: 'وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ', en: 'Whoever relies on Allah, He is enough for them.', ref: "Qur'an 65:3" },
+  { ar: 'إِنَّمَا الْمُؤْمِنُونَ إِخْوَةٌ', en: 'The believers are but brothers.', ref: "Qur'an 49:10" },
+  { ar: 'لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا', en: 'Allah does not burden a soul beyond its capacity.', ref: "Qur'an 2:286" },
+  { ar: 'وَقُل رَّبِّ زِدْنِي عِلْمًا', en: 'And say: My Lord, increase me in knowledge.', ref: "Qur'an 20:114" },
+  { ar: 'إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ', en: 'Actions are judged by intentions.', ref: 'Hadith, Sahih al-Bukhari 1' },
+  { ar: 'خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ', en: 'The best of you are those who learn the Qur\u2019an and teach it.', ref: 'Hadith, Sahih al-Bukhari 5027' },
+  { ar: 'تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ لَكَ صَدَقَةٌ', en: 'Your smile in the face of your brother is charity.', ref: "Hadith, Jami' at-Tirmidhi 1956" },
+  { ar: 'لَا يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لِأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ', en: 'None of you truly believes until he loves for his brother what he loves for himself.', ref: 'Hadith, Sahih al-Bukhari 13' }
+];
+
+/* ---------- Tiny helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const icon = (n, cls = '') => `<svg class="ico ${cls}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+function safeUrl(u) { try { const x = new URL(u); return /^https?:$/.test(x.protocol) ? x.href : ''; } catch { return ''; } }
+function timeAgo(iso) {
+  const s = Math.floor((Date.now() - new Date(iso)) / 1000);
+  if (s < 60) return 'Just now';
+  if (s < 3600) return Math.floor(s / 60) + 'm';
+  if (s < 86400) return Math.floor(s / 3600) + 'h';
+  if (s < 86400 * 30) return Math.floor(s / 86400) + 'd';
+  return new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+}
+function fmtBytes(b) { return b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB'; }
+function fmtDur(s) { s = Math.round(s); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+let toastTimer;
+function toast(msg) {
+  const el = $('#toast'); el.textContent = msg; el.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; }, 3200);
+}
+
+/* ---------- Storage (nc_* keys) ---------- */
+function load(key, def = []) { try { const v = JSON.parse(localStorage.getItem('nc_' + key)); return v == null ? def : v; } catch { return def; } }
+function save(key, data) {
+  try { localStorage.setItem('nc_' + key, JSON.stringify(data)); return true; }
+  catch { toast('Browser storage is full. Delete some content and try again.'); return false; }
+}
+const usersById = () => Object.fromEntries(load('users').map(u => [u.id, u]));
+const isPremium = u => !!u && u.subscription_status === 'premium' && (!u.subscription_expires_at || new Date(u.subscription_expires_at) > new Date());
+const productLimit = u => isPremium(u) ? PREMIUM_PRODUCTS : FREE_PRODUCTS;
+const isAdmin = u => !!u && u.role === 'admin';
+function myFavorites() {
+  const all = load('favorites');
+  const rec = all.find(f => f.user_id === me().id);
+  return rec && Array.isArray(rec.ids) ? rec.ids.slice(0, MAX_FAVORITES) : [];
+}
+function saveMyFavorites(ids) {
+  const all = load('favorites').filter(f => f.user_id !== me().id);
+  all.push({ user_id: me().id, ids: ids.slice(0, MAX_FAVORITES) });
+  save('favorites', all);
+}
+function isFavorite(uid) { return myFavorites().includes(uid); }
+function toggleFavorite(uid) {
+  if (!uid || uid === me().id) return toast('You cannot favourite yourself.');
+  let ids = myFavorites();
+  if (ids.includes(uid)) {
+    ids = ids.filter(x => x !== uid);
+    saveMyFavorites(ids);
+    toast('Removed from favourites.');
+  } else {
+    if (ids.length >= MAX_FAVORITES) return toast(`You can add only ${MAX_FAVORITES} favourite users. Remove one first.`);
+    ids.push(uid);
+    saveMyFavorites(ids);
+    toast('Added to favourites. Their posts & reels will show more often.');
+  }
+  if (view.name === 'profile' || view.name === 'home') render();
+}
+function myGroups() {
+  const uid = me().id;
+  return load('groups').filter(g => g.owner_id === uid || (g.members || []).includes(uid)).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+}
+function findGroup(id) { return load('groups').find(g => g.id === id); }
+
+let currentUser = null;
+const me = () => (currentUser = load('users').find(u => u.id === (currentUser && currentUser.id)) || currentUser);
+
+function initDB() {
+  if (!localStorage.getItem('nc_initialized')) {
+    const now = Date.now();
+    save('users', [
+      { id: 'u_admin', email: 'admin@noorchat.com', password: 'admin123', name: 'NoorChat Admin', bio: 'Platform administrator. Spreading authentic deen.', avatar: null, avatar_id: null, qualification: '', address: '', city: '', married: '', hobbies: '', role: 'admin', is_active: true, subscription_status: 'premium', subscription_expires_at: null, created_at: new Date().toISOString() },
+      { id: 'u_demo', email: 'creator@noorchat.com', password: 'demo123', name: 'Ustadh Ahmed', bio: 'Sharing reminders & halal knowledge 🌿', avatar: null, avatar_id: null, qualification: 'Alim', address: '', city: 'New Delhi', married: 'Married', hobbies: 'Quran, teaching, calligraphy', role: 'user', is_active: true, subscription_status: 'free', subscription_expires_at: null, created_at: new Date().toISOString() }
+    ]);
+    save('posts', [
+      { id: 'p1', user_id: 'u_demo', content_text: 'Assalamu Alaikum brothers & sisters 🌿\n\nStart your day with the remembrance of Allah. Even one sincere "Alhamdulillah" can change the energy of your entire morning.\n\n#NoorChat #Reminder', media_url: null, media_type: null, created_at: new Date(now - 3600000).toISOString(), likes: 24, comments: [] },
+      { id: 'p2', user_id: 'u_admin', content_text: 'Welcome to NoorChat — a space dedicated only to authentic Islamic content, Quranic reminders, and halal business.\n\nMay Allah accept from all of us. 🤲', media_url: null, media_type: null, created_at: new Date(now - 7200000).toISOString(), likes: 56, comments: [] }
+    ]);
+    save('reels', [{ id: 'r1', user_id: 'u_demo', video_url: null, caption: "Short reminder: The best of you are those who learn the Qur'an and teach it.", views_count: 1280, created_at: new Date(now - 1800000).toISOString(), likes: 89 }]);
+    save('statuses', []);
+    save('products', [{ id: 'pr1', user_id: 'u_demo', title: 'Premium Prayer Mat (Sajadah)', description: 'Soft, foldable, travel-friendly prayer mat with a clean geometric design.', price: 899, image_url: null, affiliate_link: 'https://example.com/prayer-mat', created_at: new Date().toISOString() }]);
+    save('likes', []);
+    localStorage.setItem('nc_initialized', '1');
+  }
+}
+
+/* ---------- IndexedDB: where photos & videos are kept in the browser ---------- */
+const idb = {
+  db: null,
+  open() {
+    if (this.db) return Promise.resolve(this.db);
+    return new Promise((res, rej) => {
+      if (!window.indexedDB) return rej(new Error('This browser mode cannot store photos or videos. Try a normal (non-private) window.'));
+      const r = indexedDB.open('noorchat-media', 1);
+      r.onupgradeneeded = () => r.result.createObjectStore('blobs');
+      r.onsuccess = () => { this.db = r.result; res(this.db); };
+      r.onerror = () => rej(new Error('Could not open media storage in this browser.'));
+    });
+  },
+  async tx(mode, fn) {
+    const db = await this.open();
+    return new Promise((res, rej) => {
+      const t = db.transaction('blobs', mode); const out = fn(t.objectStore('blobs'));
+      t.oncomplete = () => res(out && out.result);
+      t.onerror = t.onabort = () => rej(t.error || new Error('Storage error'));
+    });
+  },
+  put(id, blob) { return this.tx('readwrite', s => s.put(blob, id)).catch(e => { throw new Error(e && e.name === 'QuotaExceededError' ? 'Device storage is full. Free some space and try again.' : 'Could not save the file in this browser.'); }); },
+  get(id) { return this.tx('readonly', s => s.get(id)); },
+  del(id) { return this.tx('readwrite', s => s.delete(id)).catch(() => {}); }
+};
+const urlCache = new Map();
+async function mediaURL(id) {
+  if (urlCache.has(id)) return urlCache.get(id);
+  const blob = await idb.get(id);
+  if (!blob) return null;
+  const u = URL.createObjectURL(blob); urlCache.set(id, u); return u;
+}
+function dropMedia(item) {
+  if (!item || !item.media_id) return;
+  const u = urlCache.get(item.media_id); if (u) { URL.revokeObjectURL(u); urlCache.delete(item.media_id); }
+  idb.del(item.media_id);
+}
+const srcOf = item => safeUrl(item.media_url || item.video_url || item.image_url || '');
+function avatarLetter(u) { return (u && u.name ? u.name.charAt(0) : 'U').toUpperCase(); }
+function avatarHTML(u, sizeCls) {
+  const cls = 'avatar' + (sizeCls ? ' ' + sizeCls : '');
+  const letter = esc(avatarLetter(u));
+  if (!u) return `<span class="${cls}">${letter}</span>`;
+  if (u.avatar_id) return `<span class="${cls}" data-av="${esc(u.avatar_id)}">${letter}<img alt="" hidden data-mid="${esc(u.avatar_id)}"></span>`;
+  const url = safeUrl(u.avatar || '');
+  if (url) return `<span class="${cls}"><img alt="" src="${esc(url)}"></span>`;
+  return `<span class="${cls}">${letter}</span>`;
+}
+function hydrateAvatars(root) {
+  $$( '[data-av]:not([data-h])', root || document).forEach(el => {
+    el.dataset.h = '1';
+    const img = el.querySelector('img[data-mid]');
+    if (!img) return;
+    mediaURL(img.dataset.mid).then(u => {
+      if (!u) return;
+      img.src = u; img.hidden = false;
+      // hide letter by making text transparent via img cover
+    }).catch(() => {});
+  });
+}
+function syncNavAvatar(u) {
+  const el = $('#nav-avatar'); if (!el || !u) return;
+  el.outerHTML = avatarHTML(u, 'sm').replace('class="avatar sm"', 'class="avatar sm" id="nav-avatar" data-act="account-menu" aria-label="Account menu"');
+  hydrateAvatars(el.parentElement || document);
+}
+
+/* ---------- Media processing (runs before saving/uploading) ---------- */
+function guessKind(file) {
+  if (file.type.startsWith('image/')) return 'image';
+  if (file.type.startsWith('video/')) return 'video';
+  const ext = (file.name.split('.').pop() || '').toLowerCase();
+  if (['jpg', 'jpeg', 'png', 'webp', 'gif', 'heic', 'heif'].includes(ext)) return 'image';
+  if (['mp4', 'mov', 'm4v', 'webm', '3gp'].includes(ext)) return 'video';
+  return null;
+}
+function loadImageEl(file) {
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); res(img); };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error("This photo format can't be opened here. Try a JPG or PNG.")); };
+    img.src = url;
+  });
+}
+async function compressImage(file, maxDim = MEDIA_LIMITS.imageMaxDim) {
+  let bmp;
+  try { bmp = await createImageBitmap(file, { imageOrientation: 'from-image' }); }
+  catch { bmp = await loadImageEl(file); }
+  const bw = bmp.width || bmp.naturalWidth, bh = bmp.height || bmp.naturalHeight;
+  const scale = Math.min(1, maxDim / Math.max(bw, bh));
+  const w = Math.max(1, Math.round(bw * scale)), h = Math.max(1, Math.round(bh * scale));
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(bmp, 0, 0, w, h);
+  if (bmp.close) bmp.close();
+  let blob = await new Promise(r => c.toBlob(r, 'image/webp', 0.82));
+  if (!blob || blob.type !== 'image/webp') blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.85));
+  if (!blob) throw new Error('Could not process this photo.');
+  if (scale === 1 && file.size <= blob.size && /^image\/(jpeg|png|webp)$/.test(file.type)) return { blob: file, w, h };
+  return { blob, w, h };
+}
+function videoMeta(file) {
+  return new Promise((res, rej) => {
+    const v = document.createElement('video'), url = URL.createObjectURL(file);
+    const done = fn => { clearTimeout(t); URL.revokeObjectURL(url); fn(); };
+    const t = setTimeout(() => done(() => rej(new Error("Couldn't read this video. Try an MP4 (H.264) file."))), 10000);
+    v.preload = 'metadata'; v.muted = true;
+    v.onloadedmetadata = () => done(() => res({ duration: v.duration, w: v.videoWidth, h: v.videoHeight }));
+    v.onerror = () => done(() => rej(new Error("This browser can't play that video format. Try an MP4 (H.264) file.")));
+    v.src = url;
+  });
+}
+/** Validate + shrink a chosen file. ctx: post | reel | status | product */
+async function processFile(file, ctx) {
+  const kind = guessKind(file);
+  if (!kind) throw new Error('Choose a photo (JPG, PNG, WebP) or a video (MP4, WebM, MOV).');
+  if (ctx === 'reel' && kind !== 'video') throw new Error('Reels need a video file.');
+  if (ctx === 'product' && kind !== 'image') throw new Error('Products need a photo.');
+  if (kind === 'image') {
+    const { blob, w, h } = await compressImage(file);
+    return { kind, blob, w, h, info: `Photo · ${w}×${h} · ${fmtBytes(blob.size)}` + (blob.size < file.size ? ` (was ${fmtBytes(file.size)})` : '') };
+  }
+  if (file.size > MEDIA_LIMITS.videoMaxMB * 1048576) throw new Error(`This video is ${fmtBytes(file.size)}. The limit is ${MEDIA_LIMITS.videoMaxMB} MB.`);
+  const m = await videoMeta(file), max = MEDIA_LIMITS.maxSec[ctx];
+  if (max && m.duration > max + 0.5) throw new Error(`This video is ${fmtDur(m.duration)} long. ${ctx === 'reel' ? 'Reels' : ctx === 'status' ? 'Statuses' : 'Post videos'} can be up to ${fmtDur(max)}.`);
+  return { kind, blob: file, w: m.w, h: m.h, dur: m.duration, info: `Video · ${fmtDur(m.duration)} · ${fmtBytes(file.size)}` };
+}
+/** Save a processed blob. Browser mode → IndexedDB. API mode → Cloudflare R2 via presigned (or direct) upload. */
+async function storeMedia(p, purpose) {
+  if (CONFIG.API_BASE && localStorage.getItem('nc_token')) {
+    const token = localStorage.getItem('nc_token');
+    const ext = (p.blob.type.split('/')[1] || 'bin').replace('quicktime', 'mov');
+    const r = await fetch(CONFIG.API_BASE + '/api/upload/presign', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ filename: 'upload.' + ext, contentType: p.blob.type, size: p.blob.size, purpose })
+    });
+    const info = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(info.error || 'Upload could not start.');
+    const target = info.uploadUrl.startsWith('http') ? info.uploadUrl : CONFIG.API_BASE + info.uploadUrl;
+    const headers = info.mode === 'direct' ? { 'Content-Type': p.blob.type, Authorization: 'Bearer ' + token } : (info.headers || { 'Content-Type': p.blob.type });
+    const put = await fetch(target, { method: 'PUT', headers, body: p.blob });
+    if (!put.ok) throw new Error('Upload to storage failed. Check the R2 CORS settings.');
+    return { media_id: null, media_url: info.publicUrl, media_type: p.kind, media_w: p.w, media_h: p.h };
+  }
+  const id = 'm_' + uid('');
+  await idb.put(id, p.blob);
+  return { media_id: id, media_url: null, media_type: p.kind, media_w: p.w, media_h: p.h };
+}
+
+/* ---------- Hijri date (browser calendar data) ---------- */
+const HIJRI_MONTHS = ['Muharram', 'Safar', "Rabi\u02BF al-Awwal", "Rabi\u02BF al-Thani", 'Jumada al-Ula', 'Jumada al-Akhira', 'Rajab', "Sha\u02BFban", 'Ramadan', 'Shawwal', "Dhu al-Qi\u02BFdah", 'Dhu al-Hijjah'];
+function hijriString(d = new Date()) {
+  for (const cal of ['islamic-umalqura', 'islamic-civil', 'islamic']) {
+    try {
+      const parts = new Intl.DateTimeFormat('en-u-ca-' + cal + '-nu-latn', { day: 'numeric', month: 'numeric', year: 'numeric' }).formatToParts(d);
+      const get = t => Number((parts.find(p => p.type === t) || {}).value);
+      if (get('day') && get('month') && get('year')) return `${get('day')} ${HIJRI_MONTHS[get('month') - 1]} ${get('year')} AH`;
+    } catch (e) { /* try next calendar */ }
+  }
+  return '';
+}
+
+/* ---------- Prayer times (standard solar-position method; Karachi 18°/18° by default) ---------- */
+const DEFAULT_LOC = { lat: 28.6139, lng: 77.2090, tz: 5.5, label: 'New Delhi' };
+const PRAYER_NAMES = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+const rad = Math.PI / 180, deg = 180 / Math.PI;
+const dsin = x => Math.sin(x * rad), dcos = x => Math.cos(x * rad), dtan = x => Math.tan(x * rad);
+const fixA = a => ((a % 360) + 360) % 360, fixH = h => ((h % 24) + 24) % 24;
+function julian(y, m, d) { if (m <= 2) { y -= 1; m += 12; } const A = Math.floor(y / 100), B = 2 - A + Math.floor(A / 4); return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + d + B - 1524.5; }
+function sunPos(jd) {
+  const D = jd - 2451545.0, g = fixA(357.529 + 0.98560028 * D), q = fixA(280.459 + 0.98564736 * D);
+  const L = fixA(q + 1.915 * dsin(g) + 0.020 * dsin(2 * g)), e = 23.439 - 0.00000036 * D;
+  const RA = fixH(Math.atan2(dcos(e) * dsin(L), dcos(L)) * deg / 15);
+  return { decl: Math.asin(dsin(e) * dsin(L)) * deg, eqt: q / 15 - RA };
+}
+/** Returns {sunrise, times:[fajr,dhuhr,asr,maghrib,isha]} in minutes after local midnight (NaN if the sun never reaches the angle). */
+function prayerTimes(y, m, d, loc, asrFactor) {
+  const jd = julian(y, m, d) - loc.lng / 360, lat = loc.lat;
+  const mid = t => fixH(12 - sunPos(jd + t).eqt);
+  const at = (angle, t) => { const s = sunPos(jd + t), V = Math.acos((-dsin(angle) - dsin(s.decl) * dsin(lat)) / (dcos(s.decl) * dcos(lat))) * deg / 15; return mid(t) + (angle > 90 ? -V : V); };
+  const asr = t => { const s = sunPos(jd + t); return at(-Math.atan(1 / (asrFactor + dtan(Math.abs(lat - s.decl)))) * deg, t); };
+  const off = loc.tz - loc.lng / 15, toMin = h => fixH(h + off) * 60;
+  return {
+    sunrise: toMin(at(180 - 0.833, 5 / 24)),
+    times: [toMin(at(180 - 18, 5 / 24)), toMin(mid(12 / 24)), toMin(asr(13 / 24)), toMin(at(0.833, 18 / 24)), toMin(at(18, 18 / 24))]
+  };
+}
+const prayerPrefs = () => Object.assign({ loc: DEFAULT_LOC, asr: 2 }, load('prayer', {}));
+function locNow(loc) {
+  const d = new Date(Date.now() + loc.tz * 3600000);
+  return { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1, d: d.getUTCDate(), min: d.getUTCHours() * 60 + d.getUTCMinutes() + d.getUTCSeconds() / 60 };
+}
+function prayerState() {
+  const { loc, asr } = prayerPrefs(), n = locNow(loc);
+  const today = prayerTimes(n.y, n.m, n.d, loc, asr);
+  const t = new Date(Date.UTC(n.y, n.m - 1, n.d + 1));
+  const tomorrow = prayerTimes(t.getUTCFullYear(), t.getUTCMonth() + 1, t.getUTCDate(), loc, asr);
+  const ok = today.times.every(x => Number.isFinite(x)) && tomorrow.times.every(x => Number.isFinite(x));
+  let next = ok ? today.times.findIndex(x => x > n.min) : -1, wait = 0;
+  if (ok) { if (next === -1) { next = 0; wait = tomorrow.times[0] + 1440 - n.min; } else wait = today.times[next] - n.min; }
+  return { ok, loc, asr, now: n.min, today, tomorrow, next, wait };
+}
+function fmtClock(min) {
+  const m = Math.round(min) % 1440; let h = Math.floor(m / 60); const mm = m % 60, ap = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12; return `${h}:${String(mm).padStart(2, '0')} ${ap}`;
+}
+function fmtWait(min) {
+  const t = Math.max(0, Math.round(min)), h = Math.floor(t / 60), m = t % 60;
+  return h ? `${h}h ${m}m` : (m ? `${m} min` : 'now');
+}
+
+/* =====================================================================
+   AUTH, SHELL, SHEETS
+   ===================================================================== */
+function switchAuthTab(tab) {
+  $('#login-form').hidden = tab !== 'login';
+  $('#register-form').hidden = tab !== 'register';
+  $('#tab-login').setAttribute('aria-selected', tab === 'login');
+  $('#tab-register').setAttribute('aria-selected', tab === 'register');
+}
+function handleLogin(e) {
+  e.preventDefault();
+  const email = $('#login-email').value.trim().toLowerCase(), pass = $('#login-password').value;
+  const user = load('users').find(u => u.email === email && u.password === pass);
+  if (!user) return toast('Email or password is incorrect.');
+  if (!user.is_active) return toast('This account is deactivated. Contact the admin.');
+  currentUser = user; localStorage.setItem('nc_session', user.id); rememberAccount(user.id); enterApp();
+}
+function handleRegister(e) {
+  e.preventDefault();
+  const name = $('#reg-name').value.trim(), email = $('#reg-email').value.trim().toLowerCase(), pass = $('#reg-password').value;
+  if (!name) return toast('Please enter your name.');
+  if (pass.length < 6) return toast('Password needs at least 6 characters.');
+  const users = load('users');
+  if (users.find(u => u.email === email)) return toast('That email is already registered.');
+  const u = { id: uid('u_'), email, password: pass, name, bio: '', avatar: null, avatar_id: null, qualification: '', address: '', city: '', married: '', hobbies: '', role: 'user', is_active: true, subscription_status: 'free', subscription_expires_at: null, created_at: new Date().toISOString() };
+  users.push(u); save('users', users);
+  currentUser = u; localStorage.setItem('nc_session', u.id); rememberAccount(u.id);
+  toast('Account created. Welcome to NoorChat.'); enterApp();
+}
+function rememberedAccounts() {
+  try {
+    const ids = JSON.parse(localStorage.getItem('nc_accounts') || '[]');
+    return Array.isArray(ids) ? ids : [];
+  } catch { return []; }
+}
+function rememberAccount(id) {
+  if (!id) return;
+  const ids = rememberedAccounts().filter(x => x !== id);
+  ids.unshift(id);
+  localStorage.setItem('nc_accounts', JSON.stringify(ids.slice(0, 8)));
+}
+function forgetAccount(id) {
+  localStorage.setItem('nc_accounts', JSON.stringify(rememberedAccounts().filter(x => x !== id)));
+}
+function openAccountMenu() {
+  const u = me(), users = usersById();
+  const others = rememberedAccounts().filter(id => id !== u.id && users[id]).map(id => users[id]);
+  openSheet('Account', `
+    <div class="list-row" style="border:0;padding-top:0">
+      <span class="avatar">${esc(avatarLetter(u))}</span>
+      <div class="grow"><p><b>${esc(u.name)}</b></p><p class="muted small">${esc(u.email || '')}</p></div>
+    </div>
+    <button class="opt" data-act="nav" data-page="profile">${icon('user')} View profile</button>
+    <button class="opt" data-act="edit-profile">${icon('image')} Edit profile</button>
+    <button class="opt" data-act="group-create">${icon('group')} Create group</button>
+    <button class="opt" data-act="nav" data-page="groups">${icon('group')} My groups</button>
+    <button class="opt" data-act="nav" data-page="profile" data-tab="favorites">${icon('heart')} Favourites</button>
+    <button class="opt" data-act="mon-open">${icon('coin')} Monetization</button>
+    <button class="opt" data-act="accounts-open">${icon('user')} Multiple accounts</button>
+    <button class="opt" data-act="theme">${icon('moon')} Light / dark mode</button>
+    <button class="opt bad" data-act="logout">${icon('close')} Log out</button>
+    ${others.length ? `<p class="muted small" style="margin:12px 0 4px">Quick switch</p>` + others.map(o =>
+      `<button class="opt" data-act="account-switch" data-id="${esc(o.id)}"><span class="avatar sm">${esc(avatarLetter(o))}</span> ${esc(o.name)}</button>`
+    ).join('') : ''}`);
+  hydrateAvatars($('#sheet-body'));
+}
+function openAccountsSheet() {
+  const users = usersById(), meId = me().id;
+  const list = rememberedAccounts().map(id => users[id]).filter(Boolean);
+  openSheet('Multiple accounts', `
+    <p class="muted small" style="margin-bottom:12px">Switch between accounts saved on this device, or add another.</p>
+    ${list.map(u => `<div class="list-row">
+      <span class="avatar sm">${esc(avatarLetter(u))}</span>
+      <div class="grow"><p><b>${esc(u.name)}</b>${u.id === meId ? ' <span class="tag">Active</span>' : ''}</p><p class="muted small">${esc(u.email || '')}</p></div>
+      ${u.id === meId ? '' : `<button class="btn sm" data-act="account-switch" data-id="${esc(u.id)}">Switch</button>`}
+      ${u.id === meId ? '' : `<button class="btn ghost sm" data-act="account-forget" data-id="${esc(u.id)}">Remove</button>`}
+    </div>`).join('') || '<p class="muted">Only this account is saved here.</p>'}
+    <button class="btn block" style="margin-top:14px" data-act="account-add">${icon('plus', 'sm')} Add another account</button>
+    <p class="muted small" style="margin-top:10px">Add account opens login. Your current session is saved so you can switch back.</p>`);
+}
+function switchAccount(id) {
+  const u = load('users').find(x => x.id === id);
+  if (!u) return toast('Account not found on this device.');
+  if (!u.is_active) return toast('This account is deactivated.');
+  closeSheet(); stopHero();
+  if (!$('#reelview').hidden) closeReelViewer();
+  if (!$('#story').hidden) closeStory();
+  currentUser = u; localStorage.setItem('nc_session', u.id); rememberAccount(u.id);
+  toast('Switched to ' + u.name); enterApp();
+}
+function addAnotherAccount() {
+  rememberAccount(me().id);
+  closeSheet(); stopHero();
+  if (!$('#reelview').hidden) closeReelViewer();
+  if (!$('#story').hidden) closeStory();
+  // keep nc_session until they log in as someone else — clear so auth shows
+  localStorage.removeItem('nc_session'); currentUser = null; navStack.length = 0;
+  $('#app').hidden = true; $('#auth').hidden = false; window.scrollTo(0, 0);
+  toast('Log in or create another account. You can switch back anytime.');
+}
+function logout() {
+  // full logout removes only current session; accounts list stays for switcher convenience
+  localStorage.removeItem('nc_session'); currentUser = null; closeSheet(); stopHero();
+  if (!$('#reelview').hidden) closeReelViewer();
+  if (!$('#story').hidden) closeStory();
+  navStack.length = 0;
+  $('#app').hidden = true; $('#auth').hidden = false; window.scrollTo(0, 0);
+}
+function enterApp() {
+  $('#auth').hidden = true; $('#app').hidden = false;
+  const u = me();
+  syncNavAvatar(u);
+  $('#admin-tab').hidden = !isAdmin(u);
+  view = { name: 'home', arg: null, tab: 'posts' };
+  navStack.length = 0;
+  pushNav(snapshotView(), true);
+  // Extra history entry so the first Back stays inside the app
+  try { history.pushState({ nc: 1, i: 0 }, ''); } catch (e) {}
+  render(); openFromHash();
+}
+
+/* Theme */
+function syncThemeIcon() { $('#theme-ico').innerHTML = `<use href="#i-${document.documentElement.classList.contains('dark') ? 'sun' : 'moon'}"/>`; }
+function toggleTheme() {
+  document.documentElement.classList.toggle('dark');
+  localStorage.setItem('nc_theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  syncThemeIcon();
+}
+
+/* Generic bottom sheet */
+let lastFocus = null, sheetCleanup = null;
+function openSheet(title, html, onClose) {
+  lastFocus = document.activeElement; sheetCleanup = onClose || null;
+  $('#sheet-title').textContent = title; $('#sheet-body').innerHTML = html;
+  $('#sheet').hidden = false; document.body.style.overflow = 'hidden';
+  hydrateMedia($('#sheet-body'));
+}
+function closeSheet() {
+  if ($('#sheet').hidden) return;
+  $('#sheet').hidden = true; $('#sheet-body').innerHTML = ''; document.body.style.overflow = '';
+  if (sheetCleanup) { sheetCleanup(); sheetCleanup = null; }
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+
+/* =====================================================================
+   ROUTER + in-app history (browser Back stays inside the app)
+   ===================================================================== */
+let view = { name: 'home', arg: null, tab: 'posts' };
+let reelIO = null, heroTimer = null;
+const feed = { filter: 'all', list: [], shown: 0, size: 6, io: null };
+const navStack = [];
+let ignorePop = false;
+function snapshotView() { return { name: view.name, arg: view.arg, tab: view.tab }; }
+function pushNav(state, replace) {
+  const s = state || snapshotView();
+  if (replace) {
+    if (navStack.length) navStack[navStack.length - 1] = s;
+    else navStack.push(s);
+    try { history.replaceState({ nc: 1, i: navStack.length - 1 }, ''); } catch (e) {}
+  } else {
+    navStack.push(s);
+    try { history.pushState({ nc: 1, i: navStack.length - 1 }, ''); } catch (e) {}
+  }
+}
+function go(name, arg = null, tab, opts) {
+  const o = opts || {};
+  view = { name, arg, tab: tab || 'posts' };
+  if (!o.silent) pushNav(null, !!o.replace);
+  render(); window.scrollTo(0, 0);
+}
+function stopHero() { clearInterval(heroTimer); heroTimer = null; }
+function render() {
+  stopHero(); if (feed.io) feed.io.disconnect(); if (reelIO) reelIO.disconnect();
+  if (view.name === 'admin' && !isAdmin(me())) view = { name: 'home', arg: null, tab: 'posts' };
+  updateNav();
+  const fn = { home: renderHome, store: renderStore, groups: renderGroups, profile: renderProfile, admin: renderAdmin }[view.name] || renderHome;
+  fn($('#main'));
+}
+function handleAppBack() {
+  if (!$('#sheet').hidden) { closeSheet(); return true; }
+  if (!$('#reelview').hidden) { closeReelViewer(); return true; }
+  if (!$('#story').hidden) { closeStory(); return true; }
+  if (navStack.length > 1) {
+    navStack.pop();
+    const prev = navStack[navStack.length - 1];
+    view = { name: prev.name, arg: prev.arg, tab: prev.tab || 'posts' };
+    render(); window.scrollTo(0, 0);
+    return true;
+  }
+  // Stay on home — do not leave the app
+  if (view.name !== 'home') {
+    view = { name: 'home', arg: null, tab: 'posts' };
+    navStack.length = 0; navStack.push(snapshotView());
+    try { history.replaceState({ nc: 1, i: 0 }, ''); } catch (e) {}
+    render(); window.scrollTo(0, 0);
+    return true;
+  }
+  return true;
+}
+window.addEventListener('popstate', e => {
+  if (ignorePop || !currentUser || $('#app').hidden) return;
+  handleAppBack();
+  // Re-push so the next Back still hits us instead of leaving the page
+  try {
+    ignorePop = true;
+    history.pushState({ nc: 1, i: navStack.length - 1 }, '');
+    setTimeout(() => { ignorePop = false; }, 0);
+  } catch (err) {}
+});
+function updateNav() {
+  $$('.tab[data-page]').forEach(t => {
+    const p = t.dataset.page;
+    const on = p === view.name && (p !== 'profile' || !view.arg || view.arg === me().id);
+    if (on) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
+  });
+}
+/** Re-draw whatever the person is looking at after content changed. */
+function refreshView() {
+  if (view.name === 'home') { renderStories(); startFeed(feed.filter); } else render();
+}
+
+/* =====================================================================
+   MEDIA IN THE DOM
+   ===================================================================== */
+function mediaHTML(item) {
+  const src = srcOf(item), mid = item.media_id;
+  if (!src && !mid) return '';
+  const type = item.media_type || (item.video_url ? 'video' : 'image');
+  const ratio = item.media_w && item.media_h ? ` style="aspect-ratio:${+item.media_w}/${+item.media_h}"` : '';
+  const at = src ? `src="${esc(src)}"` : `data-mid="${esc(mid)}"`;
+  if (type === 'video') return `<div class="media"><video controls playsinline preload="metadata"${ratio} ${at}></video></div>`;
+  return `<div class="media"><img alt="" loading="lazy"${ratio} ${at}></div>`;
+}
+function tryPlay(v) {
+  if (!v.src) return;
+  v.muted = rvMuted && v.hasAttribute('data-rv') ? rvMuted : v.muted;
+  v.play().catch(() => { if (v.hasAttribute('data-rv')) { v.muted = true; rvMuted = true; syncRvSound(); } v.play().catch(() => {}); });
+}
+function hydrateMedia(root) {
+  $$('[data-mid]:not([data-h])', root).forEach(el => {
+    el.dataset.h = '1';
+    mediaURL(el.dataset.mid).then(u => {
+      if (!u) return mediaMissing(el);
+      const live = el.hasAttribute('data-reel-id') || el.hasAttribute('data-rv') || el.closest('#story');
+      el.src = el.tagName === 'VIDEO' && !live ? u + '#t=0.1' : u;
+      if (el.tagName === 'VIDEO' && el.dataset.visible === '1') tryPlay(el);
+    }).catch(() => mediaMissing(el));
+  });
+  hydrateAvatars(root);
+}
+function mediaMissing(el) {
+  const box = el.closest('.media');
+  if (box) { box.classList.add('missing'); box.textContent = 'This photo or video is not stored on this device.'; }
+  else el.remove();
+}
+function observeReels(root) {
+  if (!('IntersectionObserver' in window)) return;
+  if (!reelIO) reelIO = new IntersectionObserver(entries => entries.forEach(en => {
+    const v = en.target, on = en.isIntersecting && en.intersectionRatio >= 0.6;
+    v.dataset.visible = on ? '1' : '0';
+    if (on) { if (v.src) v.play().catch(() => {}); countView(v.dataset.reelId); } else v.pause();
+  }), { threshold: [0, 0.6] });
+  $$('video[data-reel-id]:not([data-o])', root).forEach(v => { v.dataset.o = '1'; reelIO.observe(v); });
+}
+const viewedReels = new Set();
+function countView(id) {
+  if (viewedReels.has(id)) return; viewedReels.add(id);
+  const reels = load('reels'), r = reels.find(x => x.id === id); if (!r) return;
+  if (!recordView(r, me().id)) return;            // own views never add to the public number
+  r.views_count = (r.views_count || 0) + 1; save('reels', reels);
+  $$(`[data-views="${id}"]`).forEach(el => { el.textContent = r.views_count.toLocaleString(); });
+}
+
+/* =====================================================================
+   HOME: greeting, mihrab hero, stories, feed
+   ===================================================================== */
+let reminderShift = 0;
+function todayReminder() {
+  const start = new Date(new Date().getFullYear(), 0, 0), day = Math.floor((new Date() - start) / 86400000);
+  return REMINDERS[(day + reminderShift) % REMINDERS.length];
+}
+const heroMode = () => (localStorage.getItem('nc_hero') === 'mini' ? 'mini' : 'open');
+const LAMP = '<svg class="lamp" viewBox="0 0 34 70" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M17 0v22"/><path d="M13 22h8l-1.5 4h-5z" fill="currentColor"/><path d="M9 30c0-3 3.5-4 8-4s8 1 8 4c0 6-3 11-8 11s-8-5-8-11z" fill="currentColor" fill-opacity=".18"/><path d="M14 41l3 5 3-5"/><circle cx="17" cy="48.5" r="1.6" fill="currentColor"/></svg>';
+function renderHome(main) {
+  const first = me().name.split(' ')[0];
+  main.innerHTML = `<div class="col">
+    <div class="greet"><h1>Assalamu alaikum, ${esc(first)}</h1><p class="hijri">${esc(hijriString().replace(/ AH$/, ''))}</p></div>
+    <div id="hero"></div>
+    <div class="compose">
+      <button class="avatar sm" data-act="nav" data-page="profile" aria-label="Your profile">${(() => { const u = me(); return u && u.avatar_id ? esc(avatarLetter(u)) + `<img alt="" hidden data-mid="${esc(u.avatar_id)}">` : (u && safeUrl(u.avatar) ? `<img alt="" src="${esc(safeUrl(u.avatar))}">` : esc(avatarLetter(u))); })()}</button>
+      <button class="say" data-act="create">What's on your mind?</button>
+      <button class="icon-btn" data-act="create-photo" aria-label="Add a photo or video">${icon('image')}</button>
+    </div>
+    <div class="tray" id="tray" aria-label="Statuses"></div>
+    <div class="chips" role="group" aria-label="Filter the feed">
+      ${[['all', 'All'], ['posts', 'Posts'], ['reels', 'Reels'], ['store', 'Halal Store']].map(([k, l]) => `<button class="chip" data-act="chip" data-f="${k}" aria-pressed="${k === 'all'}">${l}</button>`).join('')}
+    </div>
+    <div id="feed"></div><div id="sentinel" style="height:1px"></div>
+  </div>`;
+  paintHero(true);
+  heroTimer = setInterval(() => updateHero(false), 30000);
+  renderStories();
+  feed.filter = 'all'; startFeed('all');
+  hydrateAvatars(main);
+}
+function heroHTML() {
+  if (heroMode() === 'mini') return `<div class="hero-mini">${icon('star', 'fill')}<b id="hm-next">Prayer times</b><button class="link-btn" data-act="prayer-sheet">Prayer times</button><button class="icon-btn" data-act="hero-toggle" aria-label="Show today's reminder">${icon('chev-down', 'sm')}</button></div>`;
+  return `<section class="mihrab" aria-label="Today's reminder and prayer times">
+    <div class="mihrab-fill"></div>
+    <svg class="mihrab-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path class="o" d="M0 100V46C0 26 30 12 50 0C70 12 100 26 100 46V100"/><path class="i" d="M3.5 100V47C3.5 30 31 17 50 5.5C69 17 96.5 30 96.5 47V100"/></svg>
+    ${LAMP}
+    <div class="hero-tools"><button class="icon-btn" data-act="reminder-next" aria-label="Show another reminder">${icon('refresh', 'sm')}</button></div>
+    <p class="reminder-ar" id="rm-ar" lang="ar" dir="rtl"></p>
+    <p class="reminder-en" id="rm-en"></p>
+    <div class="sun-block" id="sun-block"></div>
+    <div class="mihrab-base"></div>
+  </section>`;
+}
+function paintHero(first) { const h = $('#hero'); if (!h) return; h.innerHTML = heroHTML(); updateHero(first); }
+function updateHero(first) {
+  if (!$('#hero')) return stopHero();
+  const ar = $('#rm-ar');
+  if (!ar) {
+    const st = prayerState(), el = $('#hm-next');
+    if (el) el.textContent = st.ok ? `${PRAYER_NAMES[st.next]} in ${fmtWait(st.wait)}` : 'Prayer times';
+    return;
+  }
+  const r = todayReminder();
+  ar.textContent = r.ar; ar.classList.toggle('long', r.ar.length > 32);
+  $('#rm-en').innerHTML = esc(r.en) + ' <span class="reminder-ref">' + esc(r.ref) + '</span>';
+  $('#sun-block').innerHTML = sunBlockHTML(prayerState());
+  const g = $('#sun-block .sun');
+  if (g) {
+    const tx = g.dataset.tx, ty = g.dataset.ty;
+    if (first) { g.style.transform = `translate(${g.dataset.sx}px,${g.dataset.sy}px)`; requestAnimationFrame(() => requestAnimationFrame(() => { g.style.transform = `translate(${tx}px,${ty}px)`; })); }
+    else g.style.transform = `translate(${tx}px,${ty}px)`;
+  }
+}
+function sunBlockHTML(st) {
+  const links = `<div class="sun-links"><button class="link-btn" data-act="prayer-sheet">All times</button><button class="icon-btn" data-act="hero-toggle" aria-label="Hide reminder">${icon('chev-up', 'sm')}</button></div>`;
+  if (!st.ok) return `<div class="sun-head"><p class="reminder-en" style="padding:0">Prayer times aren't available for this latitude today. Please check with your local masjid.</p>${links}</div>`;
+  const W = 320, x0 = 6, x1 = 314, base = 36, amp = 26;
+  const yAt = x => base - amp * Math.sin(Math.PI * (x - x0) / (x1 - x0));
+  const nodes = PRAYER_NAMES.map((_, i) => { const x = W * (i + 0.5) / 5; return { x, y: yAt(x) }; });
+  let d = ''; for (let x = x0; x <= x1; x += 4) d += (d ? 'L' : 'M') + x + ' ' + yAt(x).toFixed(1) + ' ';
+  const T = st.today.times, now = st.now;
+  let pt;
+  if (now <= T[0]) pt = { x: x0, y: base, night: true };
+  else if (now >= T[4]) pt = { x: x1, y: base, night: true };
+  else { let i = 0; while (i < 3 && now >= T[i + 1]) i++; const f = (now - T[i]) / (T[i + 1] - T[i]), x = nodes[i].x + f * (nodes[i + 1].x - nodes[i].x); pt = { x, y: yAt(x), night: now >= T[3] }; }
+  const upcoming = now < T[4] ? st.next : -1;
+  const circles = nodes.map((n, i) => `<circle class="node ${T[i] <= now ? 'done' : ''}" cx="${n.x}" cy="${n.y.toFixed(1)}" r="${i === upcoming ? 5 : 3.6}"/>`).join('');
+  const glyph = pt.night ? '<path class="core" transform="scale(.8)" d="M3 -7A7 7 0 1 0 7 3A5.6 5.6 0 0 1 3 -7Z"/>' : '<circle class="core" r="5.2"/>';
+  const label = `${PRAYER_NAMES[st.next]} in ${fmtWait(st.wait)}`;
+  return `<div class="sun-head"><div><p class="sun-next">${label} <span class="sun-place">· ${esc(st.loc.label.replace(/ \(.*$/, ''))}</span></p></div>${links}</div>
+  <svg class="arc" viewBox="0 0 ${W} 44" role="img" aria-label="${esc(label)}">
+    <line class="horizon" x1="0" y1="${base}" x2="${W}" y2="${base}"/>
+    <path class="path" d="${d}"/>${circles}
+    <g class="sun" data-tx="${pt.x.toFixed(1)}" data-ty="${pt.y.toFixed(1)}" data-sx="${x0}" data-sy="${base}"><circle class="glow" r="10"/>${glyph}</g>
+  </svg>
+  <div class="prayers">${PRAYER_NAMES.map((n, i) => `<div class="${i === upcoming ? 'is-next' : ''}"><b>${n}</b><span>${fmtClock(T[i])}</span></div>`).join('')}</div>`;
+}
+function openPrayerSheet() {
+  const st = prayerState(); const p = prayerPrefs();
+  const rows = st.ok ? [['Fajr', st.today.times[0], 0], ['Sunrise', st.today.sunrise, -1], ['Dhuhr', st.today.times[1], 1], ['Asr', st.today.times[2], 2], ['Maghrib', st.today.times[3], 3], ['Isha', st.today.times[4], 4]] : [];
+  openSheet('Prayer times', `
+    <p class="muted small" style="display:flex;gap:6px;align-items:center;margin-bottom:6px">${icon('pin', 'sm')} ${esc(st.loc.label)}</p>
+    <p class="small" style="margin-bottom:10px">${esc(hijriString())} · Hijri dates can differ by a day depending on moon sighting.</p>
+    <button class="btn ghost sm" data-act="prayer-loc">${icon('pin', 'sm')} Use my location</button>
+    <div class="toggle" role="group" aria-label="Asr calculation">
+      <button data-act="prayer-asr" data-v="1" aria-pressed="${p.asr === 1}">Asr: Shafi / Maliki / Hanbali</button>
+      <button data-act="prayer-asr" data-v="2" aria-pressed="${p.asr === 2}">Asr: Hanafi</button>
+    </div>
+    ${rows.length ? rows.map(([n, t, i]) => `<div class="pt-row ${i === st.next ? 'next' : ''}"><span>${n}</span><span>${fmtClock(t)}</span></div>`).join('') : '<p class="muted">Not available at this latitude today.</p>'}
+    <p class="muted small" style="margin-top:12px">Calculated on your device (Karachi method, 18° Fajr and Isha). These are estimates. Please confirm with your local masjid.</p>`);
+}
+function setPrayerPrefs(patch) { save('prayer', Object.assign(load('prayer', {}), patch)); }
+function useMyLocation() {
+  if (!navigator.geolocation) return toast('Location is not available in this browser.');
+  toast('Finding your location…');
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude: la, longitude: lo } = pos.coords;
+    setPrayerPrefs({ loc: { lat: la, lng: lo, tz: -new Date().getTimezoneOffset() / 60, label: `Your location (${Math.abs(la).toFixed(2)}°${la >= 0 ? 'N' : 'S'}, ${Math.abs(lo).toFixed(2)}°${lo >= 0 ? 'E' : 'W'})` } });
+    updateHero(false); if (!$('#sheet').hidden) openPrayerSheet(); toast('Prayer times updated for your location.');
+  }, () => toast('Location permission was denied. Showing New Delhi.'), { timeout: 12000 });
+}
+
+/* ---------- Statuses tray ---------- */
+function activeStatuses() { return load('statuses').filter(s => new Date(s.expires_at) > new Date()); }
+function storyGroups() {
+  const users = usersById(), views = load('story_views'), map = new Map(), meId = me().id;
+  activeStatuses().sort((a, b) => new Date(a.created_at) - new Date(b.created_at)).forEach(s => {
+    const u = users[s.user_id]; if (!u || u.is_active === false) return;
+    if (!map.has(u.id)) map.set(u.id, []); map.get(u.id).push(s);
+  });
+  return [...map].map(([id, list]) => ({ user: users[id], list, seen: list.every(s => views.some(v => v.story_id === s.id && v.user_id === meId)) })).sort((a, b) => a.seen - b.seen);
+}
+function renderStories() {
+  const tray = $('#tray'); if (!tray) return;
+  const groups = storyGroups(), meU = me();
+  const add = `<button class="scard add" data-act="story-add" aria-label="Add a status"><div class="top">${esc(meU.name.charAt(0).toUpperCase())}</div><span class="plus">${icon('plus', 'sm')}</span><span class="lbl">Add status</span></button>`;
+  tray.innerHTML = add + groups.map(g => {
+    const s = g.list[g.list.length - 1], src = srcOf(s), has = src || s.media_id;
+    let bg;
+    if (has && s.media_type === 'video') bg = `<video muted playsinline preload="metadata" ${src ? `src="${esc(src)}#t=0.1"` : `data-mid="${esc(s.media_id)}"`}></video>`;
+    else if (has) bg = `<img alt="" loading="lazy" ${src ? `src="${esc(src)}"` : `data-mid="${esc(s.media_id)}"`}>`;
+    else bg = `<div class="s-text">${esc((s.caption || '').slice(0, 70))}</div>`;
+    return `<button class="scard ${g.seen ? 'seen' : ''}" data-act="story-open" data-uid="${esc(g.user.id)}" aria-label="View ${esc(g.user.name)}'s status"><div class="s-bg">${bg}</div><span class="s-av">${esc(g.user.name.charAt(0).toUpperCase())}</span><span class="s-name">${esc(g.user.id === meU.id ? 'Your status' : g.user.name)}</span></button>`;
+  }).join('');
+  hydrateMedia(tray);
+}
+
+/* ---------- Story viewer ---------- */
+const sv = { groups: [], gi: 0, si: 0, timer: null };
+function openStory(userId) {
+  sv.groups = storyGroups(); sv.gi = sv.groups.findIndex(g => g.user.id === userId);
+  if (sv.gi < 0) return;
+  const views = load('story_views'), meId = me().id, list = sv.groups[sv.gi].list;
+  const firstNew = list.findIndex(s => !views.some(v => v.story_id === s.id && v.user_id === meId));
+  sv.si = firstNew < 0 ? 0 : firstNew;
+  $('#story').hidden = false; document.body.style.overflow = 'hidden'; showStory();
+}
+function stopStoryMedia() { clearTimeout(sv.timer); const v = $('#st-media video'); if (v) v.pause(); }
+function showStory() {
+  stopStoryMedia();
+  const g = sv.groups[sv.gi], s = g.list[sv.si], u = g.user;
+  $('#st-bars').innerHTML = g.list.map((_, i) => `<i class="${i < sv.si ? 'done' : ''}"><b></b></i>`).join('');
+  $('#st-avatar').textContent = u.name.charAt(0).toUpperCase(); $('#st-name').textContent = u.name; $('#st-time').textContent = timeAgo(s.created_at);
+  $('#st-del').hidden = !(s.user_id === me().id || isAdmin(me()));
+  const canDl = !!(s.media_id || srcOf(s));
+  $('#st-dl').hidden = !canDl;
+  $('#st-report').hidden = s.user_id === me().id;
+  const liked = load('likes').some(l => l.target_id === s.id && l.user_id === me().id);
+  $('#st-like').classList.toggle('on', liked);
+  const has = s.media_id || srcOf(s), holder = $('#st-media'), bar = $$('#st-bars i b')[sv.si];
+  const advance = ms => { bar.style.transition = `width ${ms}ms linear`; requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.width = '100%'; })); sv.timer = setTimeout(nextStory, ms); };
+  if (!has) { holder.innerHTML = `<div class="st-text">${esc(s.caption || '')}</div>`; $('#st-cap').textContent = ''; advance(6000); }
+  else if (s.media_type === 'video') {
+    holder.innerHTML = `<video playsinline ${srcOf(s) ? `src="${esc(srcOf(s))}"` : `data-mid="${esc(s.media_id)}"`}></video>`;
+    $('#st-cap').textContent = s.caption || '';
+    const v = $('video', holder); hydrateMedia(holder);
+    v.addEventListener('timeupdate', () => { if (v.duration) bar.style.width = (v.currentTime / v.duration * 100) + '%'; });
+    v.addEventListener('ended', nextStory);
+    v.addEventListener('loadeddata', () => { v.play().catch(() => { v.muted = true; v.play().catch(() => {}); }); });
+    if (srcOf(s)) v.play().catch(() => { v.muted = true; v.play().catch(() => {}); });
+  } else {
+    holder.innerHTML = `<img alt="" ${srcOf(s) ? `src="${esc(srcOf(s))}"` : `data-mid="${esc(s.media_id)}"`}>`;
+    $('#st-cap').textContent = s.caption || ''; hydrateMedia(holder); advance(5000);
+  }
+  const views = load('story_views');
+  if (!views.some(v => v.story_id === s.id && v.user_id === me().id)) { views.push({ story_id: s.id, user_id: me().id }); save('story_views', views); }
+}
+function nextStory() {
+  const g = sv.groups[sv.gi];
+  if (sv.si < g.list.length - 1) { sv.si++; showStory(); }
+  else if (sv.gi < sv.groups.length - 1) { sv.gi++; sv.si = 0; showStory(); }
+  else closeStory();
+}
+function prevStory() {
+  if (sv.si > 0) { sv.si--; showStory(); }
+  else if (sv.gi > 0) { sv.gi--; sv.si = 0; showStory(); }
+  else showStory();
+}
+function closeStory() {
+  stopStoryMedia(); $('#story').hidden = true; $('#st-media').innerHTML = ''; document.body.style.overflow = ''; renderStories();
+}
+function likeStory() {
+  const s = sv.groups[sv.gi].list[sv.si], likes = load('likes'), i = likes.findIndex(l => l.target_id === s.id && l.user_id === me().id);
+  if (i >= 0) likes.splice(i, 1); else likes.push({ id: uid('l_'), target_id: s.id, target_type: 'status', user_id: me().id, reaction_type: 'amen' });
+  save('likes', likes); $('#st-like').classList.toggle('on', i < 0);
+}
+function deleteStory() {
+  const s = sv.groups[sv.gi].list[sv.si];
+  if (!confirm('Delete this status?')) return;
+  deleteContent('status', s.id); closeStory(); toast('Status deleted.');
+}
+
+/* ---------- Feed ---------- */
+const GAP = '<div class="gap" aria-hidden="true"></div>';
+const fmtCount = n => n >= 1e6 ? (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M' : n >= 1e3 ? (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'K' : String(n);
+function activeReels() {
+  const users = usersById();
+  return load('reels').filter(r => users[r.user_id] && users[r.user_id].is_active !== false).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+}
+function buildFeedList(filter) {
+  const users = usersById(), active = id => users[id] && users[id].is_active !== false;
+  const favs = new Set(myFavorites());
+  // Favourite creators rank higher so their posts/reels appear more often near the top
+  const byRank = (a, b) => {
+    const fa = favs.has(a.d.user_id) ? 1 : 0, fb = favs.has(b.d.user_id) ? 1 : 0;
+    if (fa !== fb) return fb - fa;
+    return b.at - a.at;
+  };
+  const wrap = (t, arr) => arr.filter(d => active(d.user_id) && !d.group_id).map(d => ({ t, d, at: +new Date(d.created_at) }));
+  if (filter === 'reels') return wrap('reel', load('reels')).sort(byRank);
+  const posts = wrap('post', load('posts')).sort(byRank);
+  if (filter === 'posts') return posts;
+  const prods = wrap('product', load('products')).sort((a, b) => b.at - a.at), out = []; let pi = 0;
+  posts.forEach((it, i) => { out.push(it); if ((i + 1) % 4 === 0 && pi < prods.length) out.push(prods[pi++]); });
+  if (pi === 0 && prods.length) out.push(prods[0]);
+  // Reels: put favourite creators first in the carousel
+  const reels = activeReels().slice().sort((a, b) => {
+    const fa = favs.has(a.user_id) ? 1 : 0, fb = favs.has(b.user_id) ? 1 : 0;
+    if (fa !== fb) return fb - fa;
+    return new Date(b.created_at) - new Date(a.created_at);
+  }).slice(0, 12);
+  if (reels.length) out.splice(Math.min(2, out.length), 0, { t: 'reels', d: reels });
+  return out;
+}
+function startFeed(filter) {
+  feed.filter = filter; feed.list = buildFeedList(filter); feed.shown = 0;
+  $$('.chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.f === filter));
+  const box = $('#feed'); if (!box) return;
+  box.innerHTML = '';
+  if (!feed.list.length) {
+    box.innerHTML = `<div class="empty">${icon('star', 'fill')}<p>Nothing here yet. Share a reminder or a beneficial video to start.</p><button class="btn" data-act="create">Create a post</button></div>`;
+    return;
+  }
+  appendFeed();
+  if (feed.io) feed.io.disconnect();
+  if ('IntersectionObserver' in window) {
+    feed.io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) appendFeed(); }, { rootMargin: '700px' });
+    feed.io.observe($('#sentinel'));
+  } else while (feed.shown < feed.list.length) appendFeed();
+}
+function appendFeed() {
+  const box = $('#feed'); if (!box || feed.shown >= feed.list.length) return;
+  const users = usersById(), slice = feed.list.slice(feed.shown, feed.shown + feed.size);
+  const html = slice.map((it, i) => {
+    const u = users[it.d.user_id] || { id: '', name: 'Member' };
+    const card = it.t === 'reels' ? reelsRowHTML(it.d) : it.t === 'post' ? postCard(it.d, u) : it.t === 'reel' ? reelCard(it.d, u) : productCard(it.d, u);
+    return ((feed.shown + i) > 0 ? GAP : '') + card;
+  }).join('');
+  box.insertAdjacentHTML('beforeend', html);
+  feed.shown += slice.length;
+  hydrateMedia(box); observeReels(box);
+  if (feed.shown >= feed.list.length) {
+    if (feed.io) feed.io.disconnect();
+    box.insertAdjacentHTML('beforeend', `<div class="end-note" aria-label="You have seen everything">${icon('star', 'fill')}</div>`);
+  }
+}
+function reelsRowHTML(list) {
+  const users = usersById();
+  return `<section class="rrow" aria-label="Reels"><div class="rrow-head"><h2>${icon('reel')} Reels</h2><button class="link-btn dark" data-act="chip" data-f="reels">See all</button></div><div class="rrow-scroll">${list.map(r => {
+    const u = users[r.user_id] || { name: 'Member' }, src = srcOf(r), has = src || r.media_id;
+    return `<button class="rcard" data-act="reel-open" data-id="${esc(r.id)}" aria-label="Play reel by ${esc(u.name)}"><div class="rc-bg">${has ? `<video muted playsinline preload="metadata" ${src ? `src="${esc(src)}#t=0.1"` : `data-mid="${esc(r.media_id)}"`}></video>` : `<div class="rc-empty">${icon('star', 'fill')}</div>`}</div><span class="s-av">${esc(u.name.charAt(0).toUpperCase())}</span><span class="rc-cap">${esc(r.caption || '')}</span><span class="rc-views">${icon('play', 'fill sm')} <span data-views="${esc(r.id)}">${fmtCount(r.views_count || 0)}</span></span></button>`;
+  }).join('')}</div></section>`;
+}
+
+/* ---------- Cards ---------- */
+const isLiked = id => load('likes').some(l => l.target_id === id && l.user_id === me().id);
+const shareCount = id => load('posts').filter(p => p.shared_from && p.shared_from.id === id).length;
+function countsInner(type, it) {
+  const n = it.likes || 0, cm = (it.comments || []).length, sh = shareCount(it.id);
+  if (!n && !cm && !sh) return '';
+  const right = [cm ? `${cm} comment${cm > 1 ? 's' : ''}` : '', sh ? `${sh} share${sh > 1 ? 's' : ''}` : ''].filter(Boolean).join(' · ');
+  return `<span class="c-l">${n ? `<span class="em" aria-hidden="true">🤲</span><span>${n} Ameen</span>` : ''}</span><button class="c-r" data-act="comments" data-type="${type}" data-id="${esc(it.id)}">${right}</button>`;
+}
+function refreshCounts(type, id) {
+  const it = findItem(type, id); if (!it) return;
+  const html = countsInner(type, it);
+  $$(`[data-counts="${id}"]`).forEach(el => { el.innerHTML = html; el.hidden = !html; });
+}
+function byline(u, iso, type, id) {
+  const canFollow = u.id && u.id !== me().id && !load('follows').some(f => f.follower_id === me().id && f.following_id === u.id);
+  const avInner = u && u.avatar_id
+    ? `${esc(avatarLetter(u))}<img alt="" hidden data-mid="${esc(u.avatar_id)}">`
+    : (u && safeUrl(u.avatar) ? `<img alt="" src="${esc(safeUrl(u.avatar))}">` : esc(avatarLetter(u)));
+  return `<header class="byline"><button class="avatar" data-act="open-user" data-id="${esc(u.id)}" aria-label="Open ${esc(u.name)}'s profile">${avInner}</button>
+    <div class="who"><div class="nm"><b>${esc(u.name)}</b>${canFollow ? `<span class="dot" aria-hidden="true">·</span><button class="follow-link" data-act="follow-inline" data-id="${esc(u.id)}">Follow</button>` : ''}</div><time>${timeAgo(iso)}</time></div>
+    <button class="icon-btn" data-act="item-menu" data-type="${type}" data-id="${esc(id)}" aria-label="More options">${icon('dots')}</button></header>`;
+}
+function followInline(id) {
+  const fl = load('follows'); if (fl.some(f => f.follower_id === me().id && f.following_id === id)) return;
+  fl.push({ follower_id: me().id, following_id: id, created_at: new Date().toISOString() }); save('follows', fl);
+  $$(`.follow-link[data-id="${id}"]`).forEach(b => { if (b.previousElementSibling) b.previousElementSibling.remove(); b.remove(); });
+  toast(`You are now following ${(usersById()[id] || {}).name || 'this member'}.`);
+}
+function actionsBar(type, it) {
+  const liked = isLiked(it.id), html = countsInner(type, it);
+  return `<div class="counts" data-counts="${esc(it.id)}" ${html ? '' : 'hidden'}>${html}</div>
+  <div class="actions">
+    <button class="act ${liked ? 'on' : ''}" data-act="like" data-type="${type}" data-id="${esc(it.id)}" data-like="${esc(it.id)}" aria-pressed="${liked}"><span class="hands" aria-hidden="true">🤲</span><span>Ameen</span></button>
+    <button class="act" data-act="comments" data-type="${type}" data-id="${esc(it.id)}">${icon('comment')}<span>Comment</span></button>
+    <button class="act" data-act="share" data-type="${type}" data-id="${esc(it.id)}">${icon('share')}<span>Share</span></button>
+  </div><div class="comments" id="cm-${esc(it.id)}" hidden></div>`;
+}
+function quoteHTML(sf) {
+  const src = (sf.type === 'reel' ? load('reels') : load('posts')).find(x => x.id === sf.id);
+  if (!src) return `<div class="quote"><p class="muted small">The original post is no longer available.</p></div>`;
+  const u = usersById()[src.user_id] || { name: 'Member' };
+  const text = src.content_text || src.caption || '';
+  return `<div class="quote"><b>${esc(u.name)}</b>${text ? `<p class="copy">${esc(text)}</p>` : ''}${src.media_type || src.video_url ? mediaHTML(Object.assign({ media_type: 'video' }, src, { media_url: src.media_url || src.video_url })) : ''}</div>`;
+}
+function postCard(p, u) {
+  return `<article class="card" data-card="${esc(p.id)}">${byline(u, p.created_at, 'post', p.id)}
+    ${p.content_text ? `<p class="copy">${esc(p.content_text)}</p>` : ''}
+    ${p.shared_from ? quoteHTML(p.shared_from) : ''}${mediaHTML(p)}${actionsBar('post', p)}</article>`;
+}
+function reelCard(r, u) {
+  const src = srcOf(r), has = src || r.media_id;
+  const inner = has
+    ? `<video loop muted playsinline preload="metadata" data-reel-id="${esc(r.id)}" ${src ? `src="${esc(src)}"` : `data-mid="${esc(r.media_id)}"`}></video><button class="reel-sound" data-act="reel-sound" aria-label="Turn sound on">${icon('mute', 'sm')}</button>`
+    : `<div class="reel-empty"><div>${icon('star', 'fill')}<p>Sample reel</p></div></div>`;
+  return `<article class="card reel" data-card="${esc(r.id)}">${byline(u, r.created_at, 'reel', r.id)}
+    <div class="media" data-act="reel-tap">${inner}<div class="reel-cap">${esc(r.caption || '')}<span class="reel-views"><span data-views="${esc(r.id)}">${(r.views_count || 0).toLocaleString()}</span> views</span></div></div>
+    ${actionsBar('reel', r)}</article>`;
+}
+function productCard(p, u) {
+  const src = srcOf(p), link = safeUrl(p.affiliate_link);
+  const img = src || p.media_id ? `<img alt="" loading="lazy" ${src ? `src="${esc(src)}"` : `data-mid="${esc(p.media_id)}"`}>` : icon('bag');
+  return `<article class="card" data-card="${esc(p.id)}">
+    <div class="p-img">${img}<button class="icon-btn p-menu" data-act="item-menu" data-type="product" data-id="${esc(p.id)}" aria-label="More options">${icon('dots')}</button></div>
+    <div class="p-body"><div class="p-top"><h3 class="p-title">${esc(p.title)}</h3><span class="price">₹${Number(p.price || 0).toLocaleString('en-IN')}</span></div>
+      ${p.description ? `<p class="p-desc">${esc(p.description)}</p>` : ''}
+      <div class="p-foot"><small>by ${esc(u.name)}</small>${link ? `<a class="btn gold sm" href="${esc(link)}" target="_blank" rel="noopener noreferrer sponsored">Buy Now / View Offer</a>` : '<span class="tag bad">Link unavailable</span>'}</div>
+      <p class="aff-note">Affiliate link. The seller may earn a commission.</p></div></article>`;
+}
+
+/* ---------- Likes, comments, share ---------- */
+const storeKey = type => ({ post: 'posts', reel: 'reels', product: 'products', status: 'statuses' }[type]);
+function toggleLike(type, id) {
+  const likes = load('likes'), i = likes.findIndex(l => l.target_id === id && l.user_id === me().id);
+  const key = storeKey(type), arr = load(key), it = arr.find(x => x.id === id); if (!it) return;
+  if (i >= 0) { likes.splice(i, 1); it.likes = Math.max(0, (it.likes || 1) - 1); }
+  else { likes.push({ id: uid('l_'), target_id: id, target_type: type, user_id: me().id, reaction_type: 'amen' }); it.likes = (it.likes || 0) + 1; }
+  save('likes', likes); save(key, arr);
+  $$(`[data-like="${id}"]`).forEach(b => { b.classList.toggle('on', i < 0); b.setAttribute('aria-pressed', i < 0); const c = b.querySelector('.cnt'); if (c) c.textContent = it.likes; });
+  refreshCounts(type, id);
+}
+function threadOf(type, id) {
+  const key = storeKey(type), arr = load(key), it = arr.find(x => x.id === id);
+  if (!it) return { arr, key, it: null, list: [] };
+  it.comments = it.comments || []; let dirty = false;
+  it.comments.forEach((c, i) => { if (!c.id) { c.id = 'c_legacy' + i; dirty = true; } });
+  if (dirty) save(key, arr);
+  return { arr, key, it, list: it.comments };
+}
+function cmtHTML(c, reply) {
+  return `<div class="cmt ${reply ? 'reply' : ''}"><b>${esc(c.user_name || 'Member')}</b> ${esc(c.text)}<div class="meta">${timeAgo(c.created_at)}<button data-act="comment-reply" data-cid="${esc(c.parent_id || c.id)}" data-name="${esc(c.user_name || 'Member')}">Reply</button></div></div>`;
+}
+function renderThread(type, id) {
+  const box = document.getElementById('cm-' + id); if (!box) return;
+  const { list } = threadOf(type, id), reply = box.dataset.reply ? JSON.parse(box.dataset.reply) : null;
+  const tops = list.filter(c => !c.parent_id);
+  box.innerHTML = (tops.map(c => cmtHTML(c) + list.filter(r => r.parent_id === c.id).map(r => cmtHTML(r, true)).join('')).join('') || '<p class="small muted" style="margin-bottom:8px">No comments yet. Be the first to add a kind word.</p>') +
+    (reply ? `<p class="replying">Replying to ${esc(reply.name)}<button data-act="comment-cancel" data-type="${type}" data-id="${esc(id)}">Cancel</button></p>` : '') +
+    `<div class="composer"><input class="input" id="ci-${esc(id)}" maxlength="500" placeholder="Write a comment…" aria-label="Write a comment"><button class="btn sm" data-act="comment-send" data-type="${type}" data-id="${esc(id)}">Post</button></div>`;
+}
+function toggleComments(type, id) {
+  const box = document.getElementById('cm-' + id); if (!box) return;
+  if (!box.hidden) { box.hidden = true; return; }
+  delete box.dataset.reply; renderThread(type, id); box.hidden = false;
+  const input = $('input', box); if (input) input.focus();
+}
+function sendComment(type, id) {
+  const box = document.getElementById('cm-' + id), input = document.getElementById('ci-' + id);
+  if (!box || !input) return;
+  const text = input.value.trim(); if (!text) return;
+  const { arr, key, it, list } = threadOf(type, id); if (!it) return;
+  const reply = box.dataset.reply ? JSON.parse(box.dataset.reply) : null;
+  list.push({ id: uid('c_'), parent_id: reply ? reply.id : null, user_id: me().id, user_name: me().name, text, created_at: new Date().toISOString() });
+  save(key, arr); delete box.dataset.reply; renderThread(type, id);
+  refreshCounts(type, id);
+  $$(`[data-cmt-cnt="${id}"]`).forEach(el => { el.textContent = (it.comments || []).length || ''; });
+  const ni = document.getElementById('ci-' + id); if (ni) ni.focus();
+}
+const shareUrl = (type, id) => location.href.split('#')[0] + '#' + type + '/' + id;
+function openShare(type, id) {
+  const url = shareUrl(type, id), msg = 'Check this on NoorChat 🌿';
+  openSheet('Share', `
+    <label class="field"><span>Add a note (optional)</span><input class="input" id="sh-note" maxlength="300" placeholder="Say something about this…"></label>
+    <button class="opt" data-act="share-feed" data-type="${type}" data-id="${esc(id)}">${icon('repost')} Share to my feed</button>
+    <a class="opt" href="https://wa.me/?text=${encodeURIComponent(msg + '\n' + url)}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">${icon('wa')} WhatsApp</a>
+    <a class="opt" href="https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(msg)}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">${icon('send')} Telegram</a>
+    <button class="opt" data-act="copy-link" data-url="${esc(url)}">${icon('link')} Copy link</button>
+    ${navigator.share ? `<button class="opt" data-act="native-share" data-url="${esc(url)}">${icon('share')} More apps…</button>` : ''}`);
+}
+function shareToFeed(type, id) {
+  const src = (type === 'reel' ? load('reels') : load('posts')).find(x => x.id === id); if (!src) return;
+  const sf = src.shared_from || { type, id };
+  const posts = load('posts');
+  posts.unshift({ id: uid('p_'), user_id: me().id, content_text: ($('#sh-note').value || '').trim(), media_url: null, media_type: null, shared_from: sf, created_at: new Date().toISOString(), likes: 0, comments: [] });
+  save('posts', posts); closeSheet(); toast('Shared to your feed.'); refreshCounts(type, id); if (view.name === 'home' || view.name === 'profile') refreshView();
+}
+function openFromHash() {
+  const m = location.hash.match(/^#(post|reel)\/([\w-]+)$/); if (!m) return;
+  const [, type, id] = m, item = (type === 'reel' ? load('reels') : load('posts')).find(x => x.id === id);
+  history.replaceState(null, '', location.pathname + location.search);
+  if (!item) return toast('That post is no longer available on this device.');
+  const u = usersById()[item.user_id] || { id: '', name: 'Member' };
+  openSheet('Shared with you', type === 'reel' ? reelCard(item, u) : postCard(item, u));
+  observeReels($('#sheet-body'));
+}
+
+/* ---------- Item menu, report, download, delete ---------- */
+function findItem(type, id) { return load(storeKey(type)).find(x => x.id === id); }
+function hasDownloadableMedia(it) {
+  if (!it) return false;
+  return !!(it.media_id || srcOf(it));
+}
+async function downloadItem(type, id) {
+  const it = findItem(type, id); if (!it) return toast('Content not found.');
+  let blob = null, name = (type || 'file') + '-' + id;
+  try {
+    if (it.media_id) {
+      blob = await idb.get(it.media_id);
+      if (!blob) return toast('This media is not stored on this device.');
+      const ext = (blob.type || '').includes('video') ? 'mp4' : ((blob.type || '').includes('png') ? 'png' : 'jpg');
+      name += '.' + ext;
+    } else {
+      const url = srcOf(it);
+      if (!url) return toast('No photo or video to download.');
+      const r = await fetch(url); blob = await r.blob();
+      const ext = (blob.type || '').includes('video') ? 'mp4' : 'jpg';
+      name += '.' + ext;
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    toast('Download started.');
+  } catch (e) { toast('Could not download. Try again.'); }
+}
+function openItemMenu(type, id) {
+  const it = findItem(type, id); if (!it) return;
+  const mine = it.user_id === me().id, canDelete = mine || isAdmin(me());
+  const canDl = hasDownloadableMedia(it);
+  openSheet('Options',
+    (canDl ? `<button class="opt" data-act="download-item" data-type="${type}" data-id="${esc(id)}">${icon('download')} Download</button>` : '') +
+    (mine ? '' : `<button class="opt" data-act="report" data-type="${type}" data-id="${esc(id)}">${icon('flag')} Report</button>`) +
+    (canDelete ? `<button class="opt bad" data-act="delete-item" data-type="${type}" data-id="${esc(id)}">${icon('trash')} Delete</button>` : '') +
+    `<p class="muted small" style="margin-top:10px">Reports go to our moderators. Content that is not authentic Islamic content, a reminder, or halal business will be removed.</p>`);
+}
+function openReport(type, id) {
+  const reasons = [
+    'Not Islamic or inappropriate content',
+    'Spam or scam',
+    'Harassment or bullying',
+    'Hate speech',
+    'False information / fake ruling',
+    'Violence or dangerous content',
+    'Nudity or sexual content',
+    'Suicide, self-harm or eating disorders',
+    'Haram product or business',
+    'Impersonation',
+    'Intellectual property violation',
+    'Something else'
+  ];
+  openSheet('Report', `<div class="field"><span>Why are you reporting this?</span><select class="select" id="rp-reason">${reasons.map(r => `<option>${esc(r)}</option>`).join('')}</select></div>
+    <label class="field"><span>Details (optional)</span><textarea class="textarea" id="rp-details" rows="3" maxlength="400" placeholder="Add more context for moderators…"></textarea></label>
+    <button class="btn block" data-act="report-send" data-type="${type}" data-id="${esc(id)}">Send report</button>
+    <p class="muted small" style="margin-top:10px">False reports may lead to action on your account. Thank you for helping keep NoorChat clean.</p>`);
+}
+function sendReport(type, id) {
+  const reports = load('reports');
+  const details = ($('#rp-details') && $('#rp-details').value || '').trim();
+  if (!reports.some(r => r.reporter_id === me().id && r.target_id === id && r.target_type === type)) {
+    reports.push({ id: uid('rp_'), reporter_id: me().id, target_id: id, target_type: type, reason: $('#rp-reason').value, details, status: 'pending', created_at: new Date().toISOString() });
+    save('reports', reports);
+  }
+  closeSheet(); toast('Thank you. A moderator will review this.');
+}
+/** Remove content + its stored media + mark related reports as actioned. */
+function deleteContent(type, id) {
+  const key = storeKey(type), arr = load(key), it = arr.find(x => x.id === id);
+  if (it) dropMedia(it);
+  save(key, arr.filter(x => x.id !== id));
+  save('likes', load('likes').filter(l => l.target_id !== id));
+  save('reports', load('reports').map(r => r.target_id === id && r.status === 'pending' ? Object.assign(r, { status: 'actioned' }) : r));
+}
+function deleteItem(type, id) {
+  if (!confirm('Delete this permanently?')) return;
+  const it = findItem(type, id);
+  if (it && it.user_id !== me().id && isAdmin(me())) removeForPolicy(type, id, 'Removed by a moderator'); else deleteContent(type, id);
+  closeSheet(); toast('Deleted.'); refreshView();
+}
+
+
+/* =====================================================================
+   FULLSCREEN REEL VIEWER (opened from the Reels carousel)
+   ===================================================================== */
+let rvIO = null, rvMuted = false;
+function syncRvSound() { const b = $('#rv-sound'); if (b) b.innerHTML = icon(rvMuted ? 'mute' : 'vol'); $$('#rv-list video').forEach(v => { v.muted = rvMuted; }); }
+function openReelComments(type, id) {
+  const it = findItem(type, id); if (!it) return toast('Reel not found.');
+  openSheet('Comments', `<div id="cm-sheet-${esc(id)}" class="comments" style="border:0;padding:0;background:transparent"></div>`);
+  const box = document.getElementById('cm-sheet-' + id);
+  if (!box) return;
+  // reuse thread renderer against a temp container that looks like feed comments
+  box.id = 'cm-' + id;
+  delete box.dataset.reply;
+  renderThread(type, id);
+  const input = box.querySelector('input'); if (input) input.focus();
+}
+function openReelViewer(startId) {
+  const users = usersById(), list = activeReels(); if (!list.length) return;
+  const box = $('#rv-list');
+  box.innerHTML = list.map(r => {
+    const u = users[r.user_id] || { name: 'Member' }, src = srcOf(r), has = src || r.media_id, liked = isLiked(r.id);
+    return `<section class="rv-item" data-rid="${esc(r.id)}">
+      ${has ? `<video class="rv-video" loop playsinline preload="metadata" data-rv="${esc(r.id)}" ${src ? `src="${esc(src)}"` : `data-mid="${esc(r.media_id)}"`}></video>` : `<div class="rv-empty">${icon('star', 'fill')}<p>Sample reel</p></div>`}
+      <button class="rv-hit" data-act="rv-tap" aria-label="Play or pause"></button>
+      <div class="rv-info"><b>${esc(u.name)}</b><p>${esc(r.caption || '')}</p><small>Views: <span data-views="${esc(r.id)}">${(r.views_count || 0).toLocaleString()}</span></small></div>
+      <div class="rv-rail">
+        <button class="rb ${liked ? 'on' : ''}" data-act="like" data-type="reel" data-id="${esc(r.id)}" data-like="${esc(r.id)}" aria-pressed="${liked}"><span class="c">🤲</span><span class="cnt">${r.likes || 0}</span></button>
+        <button class="rb" data-act="rv-comments" data-type="reel" data-id="${esc(r.id)}"><span class="c">${icon('comment')}</span><span class="cnt" data-cmt-cnt="${esc(r.id)}">${(r.comments || []).length || ''}</span></button>
+        <button class="rb" data-act="share" data-type="reel" data-id="${esc(r.id)}"><span class="c">${icon('share')}</span>Share</button>
+        <button class="rb" data-act="item-menu" data-type="reel" data-id="${esc(r.id)}"><span class="c">${icon('dots')}</span>More</button>
+      </div></section>`;
+  }).join('');
+  $('#reelview').hidden = false; document.body.style.overflow = 'hidden';
+  syncRvSound(); hydrateMedia(box);
+  if (rvIO) rvIO.disconnect();
+  if ('IntersectionObserver' in window) {
+    rvIO = new IntersectionObserver(es => es.forEach(en => {
+      const v = en.target, on = en.isIntersecting && en.intersectionRatio >= 0.6;
+      v.dataset.visible = on ? '1' : '0';
+      if (on) { tryPlay(v); countView(v.dataset.rv); } else v.pause();
+    }), { root: box, threshold: [0, 0.6] });
+    $$('video[data-rv]', box).forEach(v => rvIO.observe(v));
+  }
+  const first = box.querySelector(`[data-rid="${startId}"]`); if (first) first.scrollIntoView({ block: 'start' });
+}
+function closeReelViewer() {
+  if (rvIO) rvIO.disconnect();
+  $$('#rv-list video').forEach(v => v.pause());
+  $('#reelview').hidden = true; $('#rv-list').innerHTML = ''; document.body.style.overflow = '';
+}
+
+/* =====================================================================
+   MONETIZATION  (modelled on the structure of Facebook's programme:
+   eligibility checklist -> apply / express interest -> review -> qualified views
+   -> policy strikes -> tax info before payout.  The NUMBERS are NoorChat's
+   own prototype values, not Meta's. Change them in MON_DEFAULT.)
+   ===================================================================== */
+const MON_DEFAULT = {
+  minAccountDays: 30, minFollowers: 500, minQualViews: 10000, minOriginal: 5, windowDays: 60,
+  strikeDays: 90, strikeBlock: 1, strikeSuspend: 3, rpm: 20, minPayout: 500
+};
+// For testing you can lower any value from the browser console, e.g.
+//   localStorage.nc_mon_config = JSON.stringify({ minFollowers: 1, minQualViews: 5, minAccountDays: 0 })
+const MON = () => Object.assign({}, MON_DEFAULT, load('mon_config', {}));
+const fmtINR = n => '₹' + (Math.round(n * 100) / 100).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtDate = iso => new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+const monRec = userId => load('monetization').find(r => r.user_id === userId) || null;
+function saveMonRec(rec) {
+  const all = load('monetization').filter(r => r.user_id !== rec.user_id); all.push(rec); save('monetization', all);
+}
+function activeStrikes(userId) { const now = Date.now(); return load('strikes').filter(s => s.user_id === userId && +new Date(s.expires_at) > now); }
+/** none | interested | pending | approved | rejected | suspended  (approved + enough active strikes = suspended) */
+function monStatus(userId) {
+  const r = monRec(userId); if (!r) return 'none';
+  if (r.status === 'approved' && activeStrikes(userId).length >= MON().strikeSuspend) return 'suspended';
+  return r.status;
+}
+function addStrike(userId, reason, type) {
+  if (!userId) return;
+  const s = load('strikes'), c = MON();
+  s.push({ id: uid('sk_'), user_id: userId, reason: reason || 'Policy violation', content_type: type, created_at: new Date().toISOString(), expires_at: new Date(Date.now() + c.strikeDays * 864e5).toISOString() });
+  save('strikes', s);
+}
+/** Admin removes content because of a violation: the owner gets a strike. (Owners deleting their own content never do.) */
+function removeForPolicy(type, id, reason) {
+  const it = findItem(type, id); if (it) addStrike(it.user_id, reason, type);
+  deleteContent(type, id);
+}
+function monMetrics(userId) {
+  const c = MON(), u = usersById()[userId], now = Date.now(), from = now - c.windowDays * 864e5;
+  const original = load('posts').filter(p => p.user_id === userId && !p.shared_from).length + load('reels').filter(r => r.user_id === userId).length;
+  const log = load('view_log').filter(v => v.owner_id === userId && v.at >= from);
+  return {
+    ageDays: u ? Math.floor((now - new Date(u.created_at)) / 864e5) : 0,
+    followers: load('follows').filter(f => f.following_id === userId).length,
+    qual: log.filter(v => v.q).length, nonQual: log.filter(v => !v.q).length,
+    original, strikes: activeStrikes(userId).length
+  };
+}
+function monChecklist(userId) {
+  const c = MON(), m = monMetrics(userId);
+  const num = (k, label, val, target) => ({ k, label, val, target, ok: val >= target, text: `${val.toLocaleString()} / ${target.toLocaleString()}` });
+  const rows = [
+    num('age', 'Account age (days)', m.ageDays, c.minAccountDays),
+    num('fol', 'Followers', m.followers, c.minFollowers),
+    num('views', `Qualified views in the last ${c.windowDays} days`, m.qual, c.minQualViews),
+    num('orig', 'Original posts or reels published', m.original, c.minOriginal),
+    { k: 'strike', label: 'No active policy strikes', ok: m.strikes < c.strikeBlock, text: m.strikes ? `${m.strikes} active` : 'None' }
+  ];
+  return { rows, ok: rows.every(r => r.ok), m, c };
+}
+function monEarnings(userId) {
+  const rec = monRec(userId) || {}, key = new Date().toISOString().slice(0, 7);
+  const pay = load('payouts').filter(p => p.user_id === userId), taken = pay.reduce((s, p) => s + p.amount, 0), earned = rec.earned_total || 0;
+  return { earned, month: (rec.earned_months || {})[key] || 0, taken, balance: Math.max(0, earned - taken), payouts: pay.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) };
+}
+/** Called whenever a reel is watched. Returns true if it counts toward the public view number. */
+function recordView(r, viewerId) {
+  const now = Date.now(), c = MON();
+  let log = load('view_log').filter(v => v.at >= now - 90 * 864e5), q = true, why = null;
+  if (r.user_id === viewerId) { q = false; why = 'own'; }
+  else if (log.some(v => v.reel_id === r.id && v.viewer_id === viewerId && v.q && now - v.at < 864e5)) { q = false; why = 'repeat'; }
+  const earns = q && monStatus(r.user_id) === 'approved', e = earns ? c.rpm / 1000 : 0;
+  log.push({ reel_id: r.id, owner_id: r.user_id, viewer_id: viewerId, at: now, q, why });
+  save('view_log', log.slice(-5000));
+  if (e) {
+    const rec = monRec(r.user_id) || { user_id: r.user_id, status: 'approved' };
+    const key = new Date().toISOString().slice(0, 7);
+    rec.earned_total = (rec.earned_total || 0) + e; rec.earned_months = rec.earned_months || {}; rec.earned_months[key] = (rec.earned_months[key] || 0) + e;
+    saveMonRec(rec);
+  }
+  return why !== 'own';
+}
+
+/* ---------- Creator-facing screen ---------- */
+const MON_STATUS_COPY = {
+  none: ['Not applied', 'Monetization is not turned on for your account yet. Check the requirements below.'],
+  interested: ['Interest recorded', 'We have your interest. This is not an application and does not guarantee an invitation. We may invite creators as monetization opens up.'],
+  pending: ['Under review', 'Your application is with the NoorChat team. We check originality and policy compliance before approving.'],
+  approved: ['Monetization is on', 'Qualified views on your original reels now earn. Keep following the Monetization Rules to stay eligible.'],
+  rejected: ['Not approved', 'Your application was not approved. Fix the issue below, then apply again when you meet every requirement.'],
+  suspended: ['Earnings paused', 'Earnings are paused. Views are not earning while this is active. See the policy strikes below.']
+};
+function monetizationHTML(u) {
+  const st = monStatus(u.id), rec = monRec(u.id), chk = monChecklist(u.id), c = chk.c, m = chk.m;
+  const reels = load('reels').filter(r => r.user_id === u.id), posts = load('posts').filter(p => p.user_id === u.id);
+  const totalViews = reels.reduce((s, r) => s + (r.views_count || 0), 0), all = posts.concat(reels);
+  const ameen = all.reduce((s, x) => s + (x.likes || 0), 0), cmts = all.reduce((s, x) => s + (x.comments || []).length, 0), earn = monEarnings(u.id);
+  const [title, copy] = MON_STATUS_COPY[st], canEarn = st === 'approved';
+  const strikes = activeStrikes(u.id), blocked = m.strikes >= c.strikeBlock;
+  let action = '';
+  if (st === 'none' || st === 'rejected' || (st === 'interested' && chk.ok)) action = blocked
+    ? `<p class="small" style="color:var(--danger);font-weight:600;margin-top:10px">You have an active policy strike, so you cannot apply until it expires.</p>`
+    : `<button class="btn ${chk.ok ? 'gold' : 'ghost'} block" style="margin-top:12px" data-act="mon-apply-open">${chk.ok ? 'Apply for Monetization' : 'Express interest'}</button>`;
+  const tone = st === 'approved' ? 'tag' : st === 'rejected' || st === 'suspended' ? 'tag bad' : 'tag warn';
+  const details = !rec ? '' : [rec.applied_at && st !== 'approved' ? `Submitted ${fmtDate(rec.applied_at)}` : '', rec.note && st === 'rejected' ? `Reason: ${esc(rec.note)}` : ''].filter(Boolean).join(' · ');
+  const pd = (rec && rec.payout) || null;
+  const payoutReady = !!(pd && pd.upi && pd.tax_last4), canPay = canEarn && payoutReady && earn.balance >= c.minPayout;
+  return `
+  <div class="panel mon-status"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2>Monetization</h2><span class="${tone}">${title}</span></div>
+    <p class="small" style="color:var(--ink-2);margin-top:6px">${copy}</p>${details ? `<p class="muted small" style="margin-top:6px">${details}</p>` : ''}${action}</div>
+  <div class="panel"><h2>Eligibility</h2><p class="muted small">Every requirement must be met. Meeting them does not guarantee approval.</p>
+    ${chk.rows.map(r => `<div class="check ${r.ok ? 'ok' : ''}"><span class="mark">${icon('check', 'sm')}</span><div class="grow"><div class="top"><span>${esc(r.label)}</span><span>${esc(r.text)}</span></div>${r.target != null ? `<div class="bar"><i style="width:${Math.min(100, r.val / r.target * 100)}%"></i></div>` : ''}</div></div>`).join('')}
+    <p class="muted small" style="margin-top:8px">You must also be 18 or older and publish only your own content. You confirm this when you apply.</p></div>
+  ${canEarn || st === 'suspended' ? `<div class="panel"><h2>Earnings</h2>
+    <div class="stats">
+      <div class="stat gold"><b>${fmtINR(earn.balance)}</b><span>Available balance</span></div>
+      <div class="stat"><b>${fmtINR(earn.month)}</b><span>This month</span></div>
+      <div class="stat"><b>${fmtINR(earn.earned)}</b><span>Lifetime earned</span></div>
+      <div class="stat"><b>${m.qual.toLocaleString()}</b><span>Qualified views</span></div>
+      <div class="stat"><b>${m.nonQual.toLocaleString()}</b><span>Non-qualified</span></div>
+      <div class="stat"><b>₹${c.rpm}</b><span>per 1,000 views</span></div>
+    </div>
+    <p class="muted small">Estimates only. Views from your own account and repeat views by the same person within 24 hours are non-qualified and do not earn.</p>
+    <div class="list-row"><div class="grow"><p><b>Payout details</b></p><p class="muted small" style="white-space:normal">${payoutReady ? `UPI ${esc(pd.upi.replace(/^(.{2}).*(@.*)$/, '$1•••$2'))} · Tax info ••••${esc(pd.tax_last4)}` : 'Required before your first payout: UPI ID and tax information (PAN).'}</p></div><button class="btn ghost sm" data-act="mon-payout-open">${payoutReady ? 'Edit' : 'Add'}</button></div>
+    <button class="btn block" style="margin-top:12px" data-act="mon-request-payout" ${canPay ? '' : 'disabled'}>Request payout</button>
+    <p class="muted small" style="margin-top:8px">${canPay ? 'Payouts are reviewed and paid by the NoorChat team.' : `Minimum payout is ${fmtINR(c.minPayout)}, and payout details must be complete.`}</p>
+    ${earn.payouts.length ? `<div style="margin-top:8px">${earn.payouts.map(p => `<div class="list-row"><div class="grow"><p>${fmtINR(p.amount)}</p><p class="muted small">${fmtDate(p.created_at)}</p></div><span class="tag ${p.status === 'paid' ? '' : 'warn'}">${p.status === 'paid' ? 'Paid' : 'Requested'}</span></div>`).join('')}</div>` : ''}</div>` : ''}
+  <div class="panel"><h2>Reach</h2><p class="muted small">Your content performance. Estimated earnings appear only after you are approved.</p>
+    <div class="stats">
+      <div class="stat"><b>${totalViews.toLocaleString()}</b><span>Reel views</span></div>
+      <div class="stat"><b>${m.qual.toLocaleString()}</b><span>Qualified views (${c.windowDays}d)</span></div>
+      <div class="stat"><b>${ameen.toLocaleString()}</b><span>Ameen</span></div>
+      <div class="stat"><b>${cmts.toLocaleString()}</b><span>Comments</span></div>
+      <div class="stat"><b>${m.followers.toLocaleString()}</b><span>Followers</span></div>
+      <div class="stat gold"><b>${canEarn ? fmtINR(earn.month) : 'Locked'}</b><span>${canEarn ? 'Earned this month' : 'Earnings'}</span></div>
+    </div></div>
+  ${strikes.length ? `<div class="panel"><h2>Policy strikes</h2><p class="muted small">1 active strike blocks applying. ${c.strikeSuspend} active strikes pause earnings. Each strike expires after ${c.strikeDays} days.</p>
+    ${strikes.map(s => `<div class="list-row"><div class="grow"><p>${esc(s.reason)}</p><p class="muted small">${esc(s.content_type || 'content')} removed · expires ${fmtDate(s.expires_at)}</p></div><span class="tag bad">Strike</span></div>`).join('')}</div>` : ''}
+  <div class="panel"><h2>Monetization Rules</h2>
+    <ol class="rules">
+      <li><b>Original content only.</b> Reposts, shared posts and content made by others do not qualify.</li>
+      <li><b>Authentic Islamic content, reminders and halal business only.</b> The same Content Policy that applies to everyone.</li>
+      <li><b>No engagement bait.</b> Do not ask people to react, share or comment in exchange for blessings, rewards or luck.</li>
+      <li><b>No misleading or harmful claims.</b> Fake rulings, miracle cures, scams and impersonation are removed and earn a strike.</li>
+      <li><b>Qualified views only.</b> One view per person per reel per day, from other accounts. Your own views do not count.</li>
+      <li><b>Strikes.</b> Content removed for a violation gives the creator a strike. Strikes block applying and can pause earnings.</li>
+      <li><b>Payouts.</b> You must be 18 or older, and tax information must be on file before the first payout.</li>
+    </ol>
+    <p class="muted small" style="margin-top:8px">Modelled on how Facebook's monetization is structured. The thresholds and rates here are NoorChat's own, and can change.</p></div>`;
+}
+function openApply() {
+  const chk = monChecklist(me().id), can = chk.ok;
+  openSheet(can ? 'Apply for Monetization' : 'Express interest', `
+    <p class="small" style="margin-bottom:8px">${can ? 'You meet every requirement. The team will review your content for originality and policy compliance.' : 'You do not meet every requirement yet. You can record your interest. This is not an application and does not guarantee an invitation.'}</p>
+    <label class="checkbox"><input type="checkbox" id="ap-18"><span>I am 18 years or older.</span></label>
+    <label class="checkbox"><input type="checkbox" id="ap-orig"><span>I create the content I publish, and I agree to the Monetization Rules and the Content Policy.</span></label>
+    <button class="btn gold block" data-act="mon-apply-send" style="margin-top:8px">${can ? 'Submit application' : 'Record my interest'}</button>`);
+}
+function submitApply() {
+  if (!$('#ap-18').checked || !$('#ap-orig').checked) return toast('Please confirm both statements to continue.');
+  const userId = me().id, chk = monChecklist(userId), old = monRec(userId);
+  if (chk.m.strikes >= chk.c.strikeBlock) return toast('An active policy strike blocks applying right now.');
+  if (old && ['pending', 'approved', 'suspended'].includes(old.status)) return toast('You already have an active request.');
+  saveMonRec(Object.assign({}, old || {}, { user_id: userId, status: chk.ok ? 'pending' : 'interested', declared_18: true, applied_at: new Date().toISOString(), note: '', reviewed_at: null, reviewed_by: null }));
+  closeSheet(); toast(chk.ok ? 'Application submitted. We will review it.' : 'Interest recorded.'); render();
+}
+function openPayoutDetails() {
+  const pd = (monRec(me().id) || {}).payout || {};
+  openSheet('Payout details', `
+    <p class="muted small" style="margin-bottom:10px">Needed before your first payout. For safety this prototype keeps only the last 4 characters of your PAN.</p>
+    <label class="field"><span>Name on account</span><input class="input" id="pd-name" maxlength="80" value="${esc(pd.name || me().name)}"></label>
+    <label class="field"><span>UPI ID</span><input class="input" id="pd-upi" maxlength="80" placeholder="name@bank" value="${esc(pd.upi || '')}" autocapitalize="none"></label>
+    <label class="field"><span>PAN (tax information)</span><input class="input" id="pd-pan" maxlength="10" placeholder="ABCDE1234F" autocapitalize="characters" value=""></label>
+    <button class="btn block" data-act="mon-payout-save">Save</button>`);
+}
+function savePayoutDetails() {
+  const name = $('#pd-name').value.trim(), upi = $('#pd-upi').value.trim(), pan = $('#pd-pan').value.trim().toUpperCase(), rec = monRec(me().id);
+  if (!rec) return toast('Apply for Monetization first.');
+  if (!name) return toast('Enter the name on the account.');
+  if (!/^[\w.\-]{2,}@[a-zA-Z]{2,}$/.test(upi)) return toast('Enter a valid UPI ID like name@bank.');
+  const oldLast = rec.payout && rec.payout.tax_last4;
+  if (!pan && !oldLast) return toast('Enter your PAN.');
+  if (pan && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan)) return toast('PAN looks wrong. It should look like ABCDE1234F.');
+  rec.payout = { name, upi, tax_last4: pan ? pan.slice(-4) : oldLast }; saveMonRec(rec);
+  closeSheet(); toast('Payout details saved.'); render();
+}
+function requestPayout() {
+  const userId = me().id, rec = monRec(userId), c = MON(), e = monEarnings(userId);
+  if (monStatus(userId) !== 'approved') return toast('Earnings are not active on your account.');
+  if (!rec.payout || !rec.payout.upi || !rec.payout.tax_last4) return toast('Add your payout details first.');
+  if (e.balance < c.minPayout) return toast(`The minimum payout is ${fmtINR(c.minPayout)}.`);
+  const p = load('payouts'); p.push({ id: uid('po_'), user_id: userId, amount: Math.floor(e.balance * 100) / 100, status: 'requested', created_at: new Date().toISOString(), paid_at: null }); save('payouts', p);
+  toast('Payout requested.'); render();
+}
+
+/* ---------- Admin: monetization review ---------- */
+function adminMonetizationHTML() {
+  const users = usersById(), recs = load('monetization'), c = MON();
+  const reqs = recs.filter(r => r.status === 'pending' || r.status === 'interested').sort((a, b) => new Date(a.applied_at) - new Date(b.applied_at));
+  const live = recs.filter(r => r.status === 'approved' || r.status === 'suspended');
+  const pays = load('payouts').filter(p => p.status === 'requested');
+  const metric = userId => { const m = monMetrics(userId); return `${m.followers} followers · ${m.qual.toLocaleString()} qualified views · ${m.original} original · ${m.ageDays}d old · ${m.strikes} strike${m.strikes === 1 ? '' : 's'}`; };
+  return `<section class="panel"><h2>Monetization</h2>
+    <p class="muted small">Review applications and interest. Approving someone who has not met every requirement is an invitation.</p>
+    ${reqs.length ? reqs.map(r => { const u = users[r.user_id]; if (!u) return ''; return `<div class="list-row" style="align-items:flex-start"><div class="grow"><p><b>${esc(u.name)}</b> <span class="tag ${r.status === 'pending' ? 'warn' : ''}">${r.status === 'pending' ? 'Applied' : 'Interested'}</span></p><p class="muted small" style="white-space:normal">${esc(metric(u.id))}</p>
+      <div class="row-actions" style="margin-top:8px"><button class="btn sm" data-act="mon-decide" data-id="${esc(u.id)}" data-v="approve">${r.status === 'pending' ? 'Approve' : 'Invite'}</button><button class="btn danger sm" data-act="mon-reject-open" data-id="${esc(u.id)}">Reject</button></div></div></div>`; }).join('') : '<p class="muted" style="margin:8px 0">No applications waiting.</p>'}
+    ${live.length ? `<p style="font-weight:700;margin-top:12px">Monetized creators</p>` + live.map(r => { const u = users[r.user_id]; if (!u) return ''; const eff = monStatus(u.id); return `<div class="list-row"><div class="grow"><p><b>${esc(u.name)}</b> <span class="tag ${eff === 'approved' ? '' : 'bad'}">${eff === 'approved' ? 'Active' : 'Paused'}</span></p><p class="muted small">Earned ${fmtINR(r.earned_total || 0)}</p></div>${r.status === 'suspended' ? `<button class="btn ghost sm" data-act="mon-decide" data-id="${esc(u.id)}" data-v="reinstate">Reinstate</button>` : `<button class="btn danger sm" data-act="mon-decide" data-id="${esc(u.id)}" data-v="suspend">Suspend</button>`}</div>`; }).join('') : ''}
+    ${pays.length ? `<p style="font-weight:700;margin-top:12px">Payout requests</p>` + pays.map(p => { const u = users[p.user_id] || { name: 'Member' }, pd = (monRec(p.user_id) || {}).payout || {}; return `<div class="list-row"><div class="grow"><p><b>${esc(u.name)}</b> · ${fmtINR(p.amount)}</p><p class="muted small">UPI ${esc(pd.upi || '—')} · PAN ••••${esc(pd.tax_last4 || '')}</p></div><button class="btn sm" data-act="mon-paid" data-id="${esc(p.id)}">Mark paid</button></div>`; }).join('') : ''}
+    <p class="muted small" style="margin-top:10px">Thresholds now: ${c.minFollowers} followers, ${c.minQualViews.toLocaleString()} qualified views in ${c.windowDays} days, ${c.minOriginal} original posts, ${c.minAccountDays}-day-old account.</p></section>`;
+}
+function monDecide(userId, action) {
+  const rec = monRec(userId); if (!rec) return;
+  if (action === 'approve') { rec.status = 'approved'; rec.note = ''; }
+  else if (action === 'suspend') rec.status = 'suspended';
+  else if (action === 'reinstate') rec.status = 'approved';
+  rec.reviewed_at = new Date().toISOString(); rec.reviewed_by = me().id; saveMonRec(rec);
+  toast(action === 'approve' ? 'Approved. Monetization is on for this creator.' : action === 'suspend' ? 'Creator suspended.' : 'Creator reinstated.'); render();
+}
+function openReject(userId) {
+  openSheet('Reject application', `<div class="field"><span>Reason (shown to the creator)</span><select class="select" id="rj-reason">${['Content is not original', 'Content policy issues', 'Not enough qualified activity yet', 'Other'].map(r => `<option>${esc(r)}</option>`).join('')}</select></div>
+    <button class="btn danger block" data-act="mon-reject-send" data-id="${esc(userId)}">Reject</button>`);
+}
+function monReject(userId) {
+  const rec = monRec(userId); if (!rec) return;
+  rec.status = 'rejected'; rec.note = $('#rj-reason').value; rec.reviewed_at = new Date().toISOString(); rec.reviewed_by = me().id; saveMonRec(rec);
+  closeSheet(); toast('Application rejected.'); render();
+}
+function monMarkPaid(id) {
+  const p = load('payouts'), x = p.find(y => y.id === id); if (!x) return;
+  x.status = 'paid'; x.paid_at = new Date().toISOString(); save('payouts', p); toast('Marked as paid.'); render();
+}
+
+/* =====================================================================
+   UPLOAD SHEET  (real file picker → compress/validate → save)
+   ===================================================================== */
+const up = { type: 'post', file: null, text: '', busy: false, url: null };
+const UP_TYPES = [['post', 'Post'], ['reel', 'Reel'], ['status', 'Status'], ['product', 'Product']];
+const UP_ACCEPT = { post: 'image/*,video/*', reel: 'video/*', status: 'image/*,video/*', product: 'image/*' };
+function openUpload(type = 'post') {
+  up.type = type; up.file = null; up.text = ''; up.busy = false;
+  openSheet('Create', `
+    <div class="notice">${icon('info')}<p><strong>Content policy.</strong> ${esc(POLICY)}</p></div>
+    <div class="seg" role="tablist" aria-label="What do you want to share?">${UP_TYPES.map(([k, l]) => `<button role="tab" data-act="up-type" data-t="${k}" aria-selected="${k === type}">${l}</button>`).join('')}</div>
+    <div id="up-fields"></div>
+    <button class="btn block" id="up-publish" data-act="up-publish">Publish</button>`, () => {
+    if (up.url) { URL.revokeObjectURL(up.url); up.url = null; } up.file = null;
+  });
+  renderUpFields();
+}
+function dropHTML(t) {
+  const hint = { post: 'Photo or video up to 10 min · max 250 MB', reel: 'Video up to 3 min · max 250 MB', status: 'Photo or video up to 1 min · max 250 MB. Caption alone works too.', product: 'Product photo (optional)' }[t];
+  return `<label class="drop" id="up-drop"><input class="sr" type="file" id="up-file" accept="${UP_ACCEPT[t]}">${icon('image')}<b>Tap to choose ${t === 'reel' ? 'a video' : t === 'product' ? 'a photo' : 'a photo or video'}</b><small>${hint}</small></label>`;
+}
+function productMeter() {
+  const u = me(), n = load('products').filter(p => p.user_id === u.id).length, lim = productLimit(u);
+  return { n, lim, html: `<p class="small" style="font-weight:600">Products listed: ${n} of ${lim} ${isPremium(u) ? '(Premium)' : '(free plan)'}</p><div class="meter"><i style="width:${Math.min(100, n / lim * 100)}%"></i></div>` };
+}
+function renderUpFields() {
+  const t = up.type, box = $('#up-fields'), btn = $('#up-publish');
+  $$('.seg [data-t]').forEach(b => b.setAttribute('aria-selected', b.dataset.t === t));
+  btn.disabled = false;
+  const ta = (ph, rows, max) => `<textarea class="textarea" id="up-text" rows="${rows}" maxlength="${max}" placeholder="${ph}" style="margin-bottom:12px">${esc(up.text)}</textarea>`;
+  if (t === 'post') box.innerHTML = ta('Share a reminder, an ayah reflection, or beneficial knowledge…', 4, 2000) + `<div id="up-media">${dropHTML(t)}</div>`;
+  else if (t === 'reel') box.innerHTML = ta('Caption for your reel…', 2, 300) + `<div id="up-media">${dropHTML(t)}</div><p class="muted small" style="margin:-4px 0 12px">Original reels that follow the Content Policy can earn once you are approved for <button class="link-btn dark" data-act="mon-open">Monetization</button>.</p>`;
+  else if (t === 'status') box.innerHTML = ta('Status caption (optional)', 2, 150) + `<div id="up-media">${dropHTML(t)}</div><p class="muted small" style="margin:-4px 0 12px">Disappears after 24 hours.</p>`;
+  else {
+    const m = productMeter();
+    if (m.n >= m.lim) {
+      btn.disabled = true;
+      box.innerHTML = m.html + `<div class="panel upgrade"><h2>You've listed all ${m.lim} products</h2><p>Premium is ₹${PREMIUM_PRICE} a month and raises your limit to ${PREMIUM_PRODUCTS}.</p><button class="btn gold" style="margin-top:12px" data-act="upgrade">See Premium</button></div>`;
+    } else box.innerHTML = m.html + `
+      <label class="field"><span>Title</span><input class="input" id="up-title" maxlength="100" placeholder="Product name"></label>
+      <label class="field"><span>Description</span><textarea class="textarea" id="up-desc" rows="2" maxlength="500" placeholder="What is it and why is it useful?"></textarea></label>
+      <label class="field"><span>Price (₹)</span><input class="input" id="up-price" type="number" min="0" inputmode="numeric" placeholder="899"></label>
+      <div id="up-media">${dropHTML(t)}</div>
+      <label class="field"><span>Affiliate ID / link (required)</span><input class="input" id="up-link" type="url" inputmode="url" placeholder="https://…"></label>`;
+  }
+  if (up.file) showPreview();
+}
+function showPreview() {
+  const box = $('#up-media'), p = up.file; if (!box || !p) return;
+  if (up.url) URL.revokeObjectURL(up.url);
+  up.url = URL.createObjectURL(p.blob);
+  box.innerHTML = `<div class="preview">${p.kind === 'image' ? `<img alt="Preview" src="${up.url}">` : `<video src="${up.url}" controls muted playsinline preload="metadata"></video>`}<button class="rm" data-act="up-remove" aria-label="Remove this file">${icon('close', 'sm')}</button></div><p class="preview-info">${esc(p.info)}</p>`;
+}
+async function handleFile(file) {
+  if (!file) return;
+  const box = $('#up-media'); if (!box) return;
+  box.innerHTML = '<div class="busy-bar"><i></i></div><p class="preview-info">Preparing your file…</p>';
+  $('#up-publish').disabled = true;
+  try { up.file = await processFile(file, up.type); showPreview(); }
+  catch (e) { up.file = null; box.innerHTML = dropHTML(up.type); toast(e.message || 'Could not read that file.'); }
+  const pb = $('#up-publish'); if (pb) pb.disabled = false;
+}
+async function submitUpload() {
+  if (up.busy) return;
+  const t = up.type, v = s => { const el = $(s); return el ? el.value.trim() : ''; }, btn = $('#up-publish');
+  let title, desc, price, link;
+  if (t === 'post' && !v('#up-text') && !up.file) return toast('Write something, or add a photo or video.');
+  if (t === 'reel' && !up.file) return toast('Choose a video for your reel.');
+  if (t === 'status' && !up.file && !v('#up-text')) return toast('Add a photo, a video, or a caption.');
+  if (t === 'product') {
+    const m = productMeter(); if (m.n >= m.lim) return toast(`Limit reached (${m.lim}). Upgrade to Premium for ${PREMIUM_PRODUCTS} products.`);
+    title = v('#up-title'); desc = v('#up-desc'); price = Math.max(0, parseInt(v('#up-price'), 10) || 0); link = safeUrl(v('#up-link'));
+    if (!title) return toast('Give your product a title.');
+    if (!link) return toast('Add a valid affiliate link that starts with https://');
+  }
+  up.busy = true; btn.disabled = true; btn.textContent = up.file ? 'Uploading…' : 'Publishing…';
+  try {
+    const m = up.file ? await storeMedia(up.file, { post: 'posts', reel: 'reels', status: 'statuses', product: 'products' }[t]) : null;
+    const now = new Date().toISOString(), meId = me().id, mm = m || {};
+    if (t === 'post') {
+      const a = load('posts'); a.unshift({ id: uid('p_'), user_id: meId, content_text: v('#up-text'), media_url: mm.media_url || null, media_id: mm.media_id || null, media_type: m ? m.media_type : null, media_w: mm.media_w, media_h: mm.media_h, created_at: now, likes: 0, comments: [] });
+      if (!save('posts', a)) throw new Error('Could not save your post.'); toast('Post published.');
+    } else if (t === 'reel') {
+      const a = load('reels'); a.unshift({ id: uid('r_'), user_id: meId, video_url: mm.media_url || null, media_url: mm.media_url || null, media_id: mm.media_id, media_type: 'video', media_w: mm.media_w, media_h: mm.media_h, caption: v('#up-text') || 'Islamic reel', views_count: 0, created_at: now, likes: 0, comments: [] });
+      if (!save('reels', a)) throw new Error('Could not save your reel.'); toast('Reel published.');
+    } else if (t === 'status') {
+      const a = load('statuses'); a.push({ id: uid('s_'), user_id: meId, media_url: mm.media_url || null, media_id: mm.media_id || null, media_type: m ? m.media_type : 'text', media_w: mm.media_w, media_h: mm.media_h, caption: v('#up-text'), expires_at: new Date(Date.now() + 864e5).toISOString(), created_at: now });
+      if (!save('statuses', a)) throw new Error('Could not save your status.'); toast('Status added for 24 hours.');
+    } else {
+      const a = load('products'); a.unshift({ id: uid('pr_'), user_id: meId, title, description: desc, price, image_url: mm.media_url || null, media_id: mm.media_id || null, affiliate_link: link, created_at: now });
+      if (!save('products', a)) throw new Error('Could not save your product.'); toast('Product listed in the Halal Store.');
+    }
+    closeSheet();
+    if (view.name === 'home') { renderStories(); startFeed(t === 'product' ? feed.filter : 'all'); } else render();
+  } catch (e) { toast(e.message || 'Something went wrong. Please try again.'); }
+  finally { up.busy = false; if (btn) { btn.disabled = false; btn.textContent = 'Publish'; } }
+}
+
+/* =====================================================================
+   STORE, PROFILE, CREATOR DASHBOARD
+   ===================================================================== */
+function cardFor(it, users) {
+  const u = users[it.d.user_id] || { id: '', name: 'Member' };
+  return it.t === 'post' ? postCard(it.d, u) : it.t === 'reel' ? reelCard(it.d, u) : productCard(it.d, u);
+}
+const dividerHTML = GAP;
+
+/* =====================================================================
+   GROUPS
+   ===================================================================== */
+function openCreateGroup() {
+  openSheet('Create group', `
+    <p class="muted small" style="margin-bottom:10px">Groups are for Islamic reminders, study circles, and halal discussion. Max 50 members in this prototype.</p>
+    <label class="field"><span>Group name</span><input class="input" id="gr-name" maxlength="60" placeholder="e.g. Quran Circle Delhi"></label>
+    <label class="field"><span>Description</span><textarea class="textarea" id="gr-desc" rows="3" maxlength="300" placeholder="What is this group about?"></textarea></label>
+    <button class="btn block" data-act="group-create-save">Create group</button>`);
+}
+function saveCreateGroup() {
+  const name = ($('#gr-name').value || '').trim(), desc = ($('#gr-desc').value || '').trim();
+  if (!name) return toast('Give your group a name.');
+  const groups = load('groups');
+  const g = { id: uid('g_'), name, description: desc, owner_id: me().id, members: [me().id], created_at: new Date().toISOString() };
+  groups.unshift(g); save('groups', groups);
+  closeSheet(); toast('Group created.'); go('groups', g.id);
+}
+function joinGroup(id) {
+  const groups = load('groups'), g = groups.find(x => x.id === id); if (!g) return;
+  g.members = g.members || [];
+  if (g.members.includes(me().id)) return toast('You are already a member.');
+  if (g.members.length >= 50) return toast('This group is full (50 members).');
+  g.members.push(me().id); save('groups', groups);
+  toast('Joined ' + g.name); render();
+}
+function leaveGroup(id) {
+  const groups = load('groups'), g = groups.find(x => x.id === id); if (!g) return;
+  if (g.owner_id === me().id) return toast('Owner cannot leave. Delete the group instead.');
+  g.members = (g.members || []).filter(x => x !== me().id); save('groups', groups);
+  toast('Left the group.'); if (view.arg === id) go('groups'); else render();
+}
+function deleteGroup(id) {
+  const g = findGroup(id); if (!g || g.owner_id !== me().id) return toast('Only the owner can delete.');
+  if (!confirm('Delete group "' + g.name + '" and its posts?')) return;
+  save('groups', load('groups').filter(x => x.id !== id));
+  // remove group posts
+  const posts = load('posts').filter(p => p.group_id !== id); save('posts', posts);
+  toast('Group deleted.'); go('groups');
+}
+function openGroupPost(gid) {
+  const g = findGroup(gid); if (!g) return;
+  if (!(g.members || []).includes(me().id) && g.owner_id !== me().id) return toast('Join the group to post.');
+  openSheet('Post in ' + g.name, `
+    <textarea class="textarea" id="gp-text" rows="4" maxlength="2000" placeholder="Share a reminder with the group…" style="margin-bottom:12px"></textarea>
+    <button class="btn block" data-act="group-post-save" data-id="${esc(gid)}">Post</button>`);
+}
+function saveGroupPost(gid) {
+  const text = ($('#gp-text').value || '').trim(); if (!text) return toast('Write something first.');
+  const posts = load('posts');
+  posts.unshift({ id: uid('p_'), user_id: me().id, group_id: gid, content_text: text, media_url: null, media_type: null, created_at: new Date().toISOString(), likes: 0, comments: [] });
+  save('posts', posts); closeSheet(); toast('Posted to group.'); render();
+}
+function renderGroups(main) {
+  const users = usersById(), gid = view.arg;
+  if (gid) {
+    const g = findGroup(gid);
+    if (!g) { toast('Group not found.'); return go('groups'); }
+    const members = g.members || [];
+    const isMember = members.includes(me().id) || g.owner_id === me().id;
+    const isOwner = g.owner_id === me().id;
+    const gPosts = load('posts').filter(p => p.group_id === gid).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    main.innerHTML = `<div class="col">
+      <div class="head-row"><button class="icon-btn" data-act="nav" data-page="groups" aria-label="Back">${icon('chev-up')}</button><h1 style="flex:1;text-align:center">${esc(g.name)}</h1><span style="width:40px"></span></div>
+      <div class="panel">
+        <p class="muted small">${esc(g.description || 'No description')}</p>
+        <p class="small" style="margin-top:8px"><b>${members.length}</b> members · Owner: ${esc((users[g.owner_id] || {}).name || 'Member')}</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+          ${isMember ? `<button class="btn sm" data-act="group-post" data-id="${esc(g.id)}">${icon('plus', 'sm')} Post</button>` : `<button class="btn gold sm" data-act="group-join" data-id="${esc(g.id)}">Join group</button>`}
+          ${isMember && !isOwner ? `<button class="btn ghost sm" data-act="group-leave" data-id="${esc(g.id)}">Leave</button>` : ''}
+          ${isOwner ? `<button class="btn danger sm" data-act="group-delete" data-id="${esc(g.id)}">Delete group</button>` : ''}
+        </div>
+      </div>
+      <h2 style="font-family:var(--f-display);font-size:18px;margin:8px 2px 12px">Group posts</h2>
+      ${gPosts.length ? gPosts.map((p, i) => (i ? GAP : '') + postCard(p, users[p.user_id] || { name: 'Member', id: '' })).join('') : `<div class="empty">${icon('group')}<p>No posts yet.${isMember ? ' Be the first to share a reminder.' : ''}</p></div>`}
+    </div>`;
+    hydrateMedia(main); hydrateAvatars(main);
+    return;
+  }
+  const mine = myGroups(), all = load('groups').slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  const others = all.filter(g => !(g.members || []).includes(me().id) && g.owner_id !== me().id);
+  const card = g => {
+    const n = (g.members || []).length;
+    const member = (g.members || []).includes(me().id) || g.owner_id === me().id;
+    return `<div class="panel" style="cursor:pointer" data-act="group-open" data-id="${esc(g.id)}">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div><h2 style="font-family:var(--f-display);font-size:17px;margin:0">${esc(g.name)}</h2>
+          <p class="muted small" style="margin-top:4px">${esc((g.description || '').slice(0, 100))}</p>
+          <p class="small" style="margin-top:6px">${n} member${n === 1 ? '' : 's'}${g.owner_id === me().id ? ' · You own this' : ''}</p></div>
+        ${member ? '<span class="tag">Joined</span>' : `<button class="btn sm" data-act="group-join" data-id="${esc(g.id)}">Join</button>`}
+      </div></div>`;
+  };
+  main.innerHTML = `<div class="col">
+    <div class="head-row"><h1>Groups</h1><button class="btn sm" data-act="group-create">${icon('plus', 'sm')} Create</button></div>
+    <p class="muted small" style="margin:-4px 2px 12px">Study circles, reminder groups, and halal discussion — keep it authentic.</p>
+    ${mine.length ? `<p style="font-weight:700;margin:4px 2px 8px">Your groups</p>${mine.map(card).join('')}` : ''}
+    ${others.length ? `<p style="font-weight:700;margin:12px 2px 8px">Discover</p>${others.map(card).join('')}` : (!mine.length ? `<div class="empty">${icon('group')}<p>No groups yet. Create one for your circle.</p><button class="btn" data-act="group-create">Create a group</button></div>` : '')}
+  </div>`;
+}
+function renderStore(main) {
+  const users = usersById(), prods = load('products').filter(p => users[p.user_id] && users[p.user_id].is_active !== false).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  main.innerHTML = `<div class="col"><div class="head-row"><h1>Halal Store</h1><button class="btn sm" data-act="store-add">${icon('plus', 'sm')} Add product</button></div>
+    ${prods.length ? `<div class="grid2">${prods.map(p => productCard(p, users[p.user_id])).join('')}</div>` : `<div class="empty">${icon('bag')}<p>No products yet. List the first halal product.</p><button class="btn" data-act="store-add">Add a product</button></div>`}</div>`;
+  hydrateMedia(main);
+}
+function renderProfile(main) {
+  const users = usersById(), meId = me().id, u = users[view.arg || meId];
+  if (!u) return go('home', null, 'posts', { replace: true });
+  const own = u.id === meId;
+  let tab = view.tab || 'posts';
+  if (!own && tab === 'monetization') tab = 'posts';
+  const posts = load('posts').filter(p => p.user_id === u.id), reels = load('reels').filter(r => r.user_id === u.id), prods = load('products').filter(p => p.user_id === u.id);
+  const fl = load('follows'), followers = fl.filter(f => f.following_id === u.id).length, following = fl.filter(f => f.follower_id === u.id).length, iFollow = fl.some(f => f.follower_id === meId && f.following_id === u.id);
+  const tabs = [['posts', 'Posts'], ['reels', 'Reels'], ['store', 'Halal Store']].concat(own ? [['favorites', 'Favourites'], ['monetization', 'Monetization']] : []);
+  let body = '';
+  if (tab === 'posts') {
+    const items = posts.map(d => ({ t: 'post', d })).sort((a, b) => new Date(b.d.created_at) - new Date(a.d.created_at));
+    body = items.length ? items.map((it, i) => (i ? dividerHTML : '') + cardFor(it, users)).join('') : `<div class="empty">${icon('star', 'fill')}<p>${own ? 'You have not posted yet.' : 'No posts yet.'}</p>${own ? '<button class="btn" data-act="create">Create a post</button>' : ''}</div>`;
+  } else if (tab === 'reels') {
+    const items = reels.map(d => ({ t: 'reel', d })).sort((a, b) => new Date(b.d.created_at) - new Date(a.d.created_at));
+    body = items.length ? items.map((it, i) => (i ? dividerHTML : '') + cardFor(it, users)).join('') : `<div class="empty">${icon('reel')}<p>${own ? 'You have no reels yet.' : 'No reels yet.'}</p>${own ? '<button class="btn" data-act="create">Create a reel</button>' : ''}</div>`;
+  } else if (tab === 'favorites' && own) {
+    const ids = myFavorites(), favUsers = ids.map(id => users[id]).filter(Boolean);
+    body = `<div class="panel"><h2>Favourite creators</h2>
+      <p class="muted small">Add up to ${MAX_FAVORITES} people. Their posts and reels appear more often in your Home feed.</p>
+      <p class="small" style="font-weight:600;margin-top:8px">${ids.length} of ${MAX_FAVORITES} slots used</p>
+      <div class="meter"><i style="width:${Math.min(100, ids.length / MAX_FAVORITES * 100)}%"></i></div>
+      ${favUsers.length ? favUsers.map(fu => `<div class="list-row">
+        <button class="avatar" data-act="open-user" data-id="${esc(fu.id)}">${esc((fu.name || 'U').charAt(0).toUpperCase())}</button>
+        <div class="grow"><p><b>${esc(fu.name)}</b></p><p class="muted small">${esc(fu.bio || fu.city || '')}</p></div>
+        <button class="btn ghost sm" data-act="fav-toggle" data-id="${esc(fu.id)}">Remove</button>
+      </div>`).join('') : `<p class="muted" style="margin-top:10px">No favourites yet. Open someone's profile and tap <b>Add to favourites</b>.</p>`}
+      <p class="muted small" style="margin-top:12px">Tip: follow people you trust for authentic reminders, then mark up to ${MAX_FAVORITES} as favourites.</p>
+    </div>`;
+  } else if (tab === 'store') {
+    const m = productMeter();
+    body = (own ? `<div class="panel"><h2>Your storefront</h2>${m.html}${isPremium(u) ? `<p class="small" style="color:var(--gold-text);font-weight:600">Premium active${u.subscription_expires_at ? ' until ' + new Date(u.subscription_expires_at).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) : ''}. Limit: ${PREMIUM_PRODUCTS} products.</p>` : ''}
+      <button class="btn block" style="margin-top:8px" data-act="store-add">${icon('plus', 'sm')} Add product</button></div>
+      ${!isPremium(u) ? `<div class="panel upgrade"><h2>Premium: ₹${PREMIUM_PRICE} a month</h2><p>Raise your limit from ${FREE_PRODUCTS} to ${PREMIUM_PRODUCTS} products.</p><button class="btn gold" style="margin-top:12px" data-act="upgrade">Upgrade to Premium</button></div>` : (u.subscription_expires_at ? `<p style="margin-bottom:14px"><button class="btn ghost sm" data-act="upgrade">Renew Premium</button></p>` : '')}` : '') +
+      (prods.length ? `<div class="grid2">${prods.map(p => productCard(p, u)).join('')}</div>` : `<div class="empty">${icon('bag')}<p>${own ? 'You have no products yet.' : 'No products listed.'}</p></div>`);
+  } else body = monetizationHTML(u);
+  const metaBits = [];
+  if (u.qualification) metaBits.push(`<span>${esc(u.qualification)}</span>`);
+  if (u.city) metaBits.push(`<span>${icon('pin', 'sm')} ${esc(u.city)}</span>`);
+  if (u.married) metaBits.push(`<span>${esc(u.married)}</span>`);
+  if (u.hobbies) metaBits.push(`<span>${esc(u.hobbies)}</span>`);
+  const meta = metaBits.length ? `<div class="p-meta">${metaBits.join('')}</div>` : '';
+  const addr = u.address ? `<p class="muted small" style="margin-top:4px">${esc(u.address)}</p>` : '';
+  main.innerHTML = `<div class="col"><div class="banner"></div>
+    <div class="p-head">${avatarHTML(u, 'lg')}
+      <h1>${esc(u.name)}${isPremium(u) ? '<span class="badge">Premium</span>' : ''}${monStatus(u.id) === 'approved' ? '<span class="badge">Monetized</span>' : ''}${isAdmin(u) ? '<span class="badge plain">Admin</span>' : ''}</h1>
+      <p class="bio">${esc(u.bio || (own ? 'Add a short bio so people know who you are.' : ''))}</p>
+      ${meta}${addr}
+      <div class="counts"><div><b>${posts.length}</b><span>Posts</span></div><div><b>${reels.length}</b><span>Reels</span></div><div><b>${followers}</b><span>Followers</span></div><div><b>${following}</b><span>Following</span></div><div><b>${prods.length}</b><span>Products</span></div></div>
+      ${own ? `<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" data-act="edit-profile">Edit profile</button><button class="btn ghost sm" data-act="profile-tab" data-tab="favorites">${icon('heart', 'sm')} Favourites</button><button class="btn ghost sm" data-act="logout">Log out</button></div>`
+        : `<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ${iFollow ? 'ghost' : ''} sm" data-act="follow" data-id="${esc(u.id)}">${iFollow ? 'Following' : 'Follow'}</button>
+        <button class="btn ${isFavorite(u.id) ? 'ghost' : 'gold'} sm" data-act="fav-toggle" data-id="${esc(u.id)}">${isFavorite(u.id) ? '★ Favourited' : '☆ Add to favourites'}</button></div>`}
+    </div>
+    <div class="tabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" data-act="profile-tab" data-tab="${k}" aria-selected="${k === tab}">${l}</button>`).join('')}</div>
+    <div>${body}</div></div>`;
+  hydrateMedia(main); hydrateAvatars(main); observeReels(main);
+}
+function toggleFollow(id) {
+  if (id === me().id) return;
+  const fl = load('follows'), i = fl.findIndex(f => f.follower_id === me().id && f.following_id === id);
+  if (i >= 0) fl.splice(i, 1); else fl.push({ follower_id: me().id, following_id: id, created_at: new Date().toISOString() });
+  save('follows', fl); render();
+}
+function openEditProfile() {
+  const u = me();
+  const marriedOpts = ['', 'Single', 'Married', 'Prefer not to say'];
+  openSheet('Edit profile', `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+      <span id="ep-av-wrap">${avatarHTML(u, 'lg')}</span>
+      <div>
+        <label class="btn ghost sm" style="cursor:pointer">${icon('image', 'sm')} Photo from gallery
+          <input class="sr" type="file" id="ep-avatar" accept="image/*">
+        </label>
+        <p class="muted small" style="margin-top:6px">JPG or PNG. Optional.</p>
+      </div>
+    </div>
+    <label class="field"><span>Name</span><input class="input" id="ep-name" maxlength="60" value="${esc(u.name)}"></label>
+    <label class="field"><span>Bio</span><textarea class="textarea" id="ep-bio" rows="3" maxlength="200">${esc(u.bio || '')}</textarea></label>
+    <label class="field"><span>Qualification</span><input class="input" id="ep-qual" maxlength="80" placeholder="e.g. Alim, Hafiz, Graduate" value="${esc(u.qualification || '')}"></label>
+    <label class="field"><span>City</span><input class="input" id="ep-city" maxlength="60" placeholder="e.g. New Delhi" value="${esc(u.city || '')}"></label>
+    <label class="field"><span>Address</span><input class="input" id="ep-address" maxlength="120" placeholder="Area / locality (optional)" value="${esc(u.address || '')}"></label>
+    <label class="field"><span>Marital status</span><select class="select" id="ep-married">${marriedOpts.map(o => `<option value="${esc(o)}" ${(u.married || '') === o ? 'selected' : ''}>${o ? esc(o) : 'Prefer not to say'}</option>`).join('')}</select></label>
+    <label class="field"><span>Hobbies</span><input class="input" id="ep-hobbies" maxlength="120" placeholder="e.g. Quran, reading, calligraphy" value="${esc(u.hobbies || '')}"></label>
+    <button class="btn block" data-act="save-profile">Save changes</button>`);
+  hydrateAvatars($('#sheet-body'));
+  window.__epAvatarFile = null;
+}
+async function saveProfile() {
+  const name = $('#ep-name').value.trim(); if (!name) return toast('Name cannot be empty.');
+  const users = load('users'), u = users.find(x => x.id === me().id); if (!u) return;
+  u.name = name;
+  u.bio = ($('#ep-bio').value || '').trim();
+  u.qualification = ($('#ep-qual').value || '').trim();
+  u.city = ($('#ep-city').value || '').trim();
+  u.address = ($('#ep-address').value || '').trim();
+  u.married = ($('#ep-married').value || '').trim();
+  u.hobbies = ($('#ep-hobbies').value || '').trim();
+  const btn = document.querySelector('[data-act="save-profile"]');
+  if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+  try {
+    if (window.__epAvatarFile) {
+      const processed = await processFile(window.__epAvatarFile, 'product'); // image compress
+      if (u.avatar_id) { try { await idb.del(u.avatar_id); } catch (e) {} }
+      const stored = await storeMedia(processed, 'avatar');
+      u.avatar_id = stored.media_id || null;
+      u.avatar = stored.media_url || null;
+      window.__epAvatarFile = null;
+    }
+    save('users', users); currentUser = u;
+    syncNavAvatar(u);
+    closeSheet(); toast('Profile updated.'); render();
+  } catch (e) {
+    toast(e.message || 'Could not save profile photo.');
+    if (btn) { btn.disabled = false; btn.textContent = 'Save changes'; }
+  }
+}
+function openUpgrade() {
+  const u = me(), prem = isPremium(u);
+  if (isAdmin(u) && !u.subscription_expires_at) return toast('Admin accounts already have Premium.');
+  openSheet('NoorChat Premium', `<div class="panel upgrade" style="margin-bottom:12px"><h2>₹${PREMIUM_PRICE} <span style="font-size:14px">per month</span></h2><p>List up to ${PREMIUM_PRODUCTS} halal products instead of ${FREE_PRODUCTS}.</p></div>
+    ${prem ? `<p class="small muted" style="margin-bottom:10px">Premium is active until ${new Date(u.subscription_expires_at).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}.</p>` : ''}
+    <button class="btn gold block" data-act="pay">${prem ? 'Renew' : 'Pay'} ₹${PREMIUM_PRICE} (simulated)</button>
+    <p class="muted small" style="margin-top:10px">This is a payment simulation. No money is charged. Connect Razorpay or Stripe for real payments.</p>`);
+}
+function payPremium() {
+  const users = load('users'), u = users.find(x => x.id === me().id); if (!u) return;
+  const base = Math.max(Date.now(), u.subscription_expires_at ? +new Date(u.subscription_expires_at) : 0), exp = new Date(base + 30 * 864e5).toISOString();
+  u.subscription_status = 'premium'; u.subscription_expires_at = exp; save('users', users); currentUser = u;
+  const pay = load('payments'); pay.push({ id: uid('sub_'), user_id: u.id, payment_id: 'sim_' + uid(''), amount: PREMIUM_PRICE * 100, status: 'active', expiry_date: exp, created_at: new Date().toISOString() }); save('payments', pay);
+  closeSheet(); toast(`Premium is active. You can now list ${PREMIUM_PRODUCTS} products.`); render();
+}
+
+/* =====================================================================
+   ADMIN
+   ===================================================================== */
+const adminUI = { q: '', filter: 'all', tab: 'posts' };
+function snippet(type, id) {
+  const it = findItem(type, id); if (!it) return null;
+  if (type === 'post') return (it.content_text || (it.media_type ? 'Photo or video post' : 'Shared post')).slice(0, 90);
+  if (type === 'reel') return (it.caption || 'Reel').slice(0, 90);
+  if (type === 'status') return (it.caption || (it.media_type === 'video' ? 'Video status' : 'Status')).slice(0, 90);
+  return (it.title || 'Product').slice(0, 90);
+}
+function renderAdmin(main) {
+  const users = load('users'), byId = usersById(), reports = load('reports').filter(r => r.status === 'pending').sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  const stat = (n, l) => `<div class="stat"><b>${n}</b><span>${l}</span></div>`;
+  main.innerHTML = `<div class="col"><div class="head-row"><h1>Admin panel</h1></div>
+    <div class="stats">${stat(users.length, 'Users')}${stat(load('posts').length, 'Posts')}${stat(load('reels').length, 'Reels')}${stat(load('products').length, 'Products')}${stat(activeStatuses().length, 'Statuses')}${stat(reports.length, 'Open reports')}</div>
+    <section class="panel"><h2>Moderation queue</h2>${reports.length ? reports.map(r => {
+      const s = snippet(r.target_type, r.target_id), rep = byId[r.reporter_id];
+      return `<div class="list-row" style="align-items:flex-start"><div class="grow"><p><span class="tag warn">${esc(r.target_type)}</span> ${s === null ? '<span class="muted">Already removed</span>' : esc(s)}</p><p class="muted small" style="white-space:normal">${esc(r.reason || '')} · reported by ${esc(rep ? rep.name : 'a member')} ${timeAgo(r.created_at)}</p>
+        <div class="row-actions" style="margin-top:8px"><button class="btn ghost sm" data-act="report-resolve" data-id="${esc(r.id)}" data-v="keep">${s === null ? 'Dismiss' : 'Approve (keep)'}</button>${s === null ? '' : `<button class="btn danger sm" data-act="report-resolve" data-id="${esc(r.id)}" data-v="remove">Delete content</button>`}</div></div></div>`;
+    }).join('') : '<p class="muted">Nothing to review. All clear.</p>'}</section>
+    ${adminMonetizationHTML()}
+    <section class="panel"><h2>Users</h2><div class="filters"><input class="input" id="adm-q" type="search" placeholder="Search name or email" aria-label="Search users" value="${esc(adminUI.q)}"><select class="select" id="adm-f" aria-label="Filter users">${[['all', 'All'], ['active', 'Active'], ['inactive', 'Deactivated'], ['premium', 'Premium']].map(([k, l]) => `<option value="${k}" ${adminUI.filter === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div><div id="adm-users" class="scroll-box"></div></section>
+    <section class="panel"><h2>Content</h2><div class="tabs" role="tablist" style="margin-top:8px">${['posts', 'reels', 'statuses', 'products'].map(k => `<button role="tab" data-act="admin-tab" data-tab="${k}" aria-selected="${k === adminUI.tab}">${k[0].toUpperCase() + k.slice(1)}</button>`).join('')}</div><div id="adm-content" class="scroll-box"></div></section></div>`;
+  renderAdminUsers(); renderAdminContent();
+}
+function renderAdminUsers() {
+  const box = $('#adm-users'); if (!box) return;
+  const q = adminUI.q.toLowerCase(), f = adminUI.filter;
+  const list = load('users').filter(u => (!q || u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)) && (f === 'all' || (f === 'active' && u.is_active) || (f === 'inactive' && !u.is_active) || (f === 'premium' && isPremium(u))));
+  box.innerHTML = list.length ? list.map(u => `<div class="list-row"><div class="grow"><p><b>${esc(u.name)}</b> ${isAdmin(u) ? '<span class="tag">Admin</span>' : ''}${isPremium(u) ? ' <span class="tag warn">Premium</span>' : ''}${u.is_active ? '' : ' <span class="tag bad">Deactivated</span>'}</p><p class="muted small">${esc(u.email)}</p></div>
+    ${isAdmin(u) ? '' : `<div class="row-actions"><button class="btn ghost sm" data-act="admin-user-toggle" data-id="${esc(u.id)}">${u.is_active ? 'Deactivate' : 'Activate'}</button><button class="btn danger sm" data-act="admin-user-delete" data-id="${esc(u.id)}">Delete</button></div>`}</div>`).join('') : '<p class="muted">No users match.</p>';
+}
+function renderAdminContent() {
+  const box = $('#adm-content'); if (!box) return;
+  const type = { posts: 'post', reels: 'reel', statuses: 'status', products: 'product' }[adminUI.tab], users = usersById();
+  const list = load(adminUI.tab).slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 40);
+  box.innerHTML = list.length ? list.map(it => `<div class="list-row"><div class="grow"><p>${esc(snippet(type, it.id))}</p><p class="muted small">${esc((users[it.user_id] || {}).name || 'Member')} · ${timeAgo(it.created_at)}</p></div><button class="btn danger sm" data-act="admin-content-delete" data-type="${type}" data-id="${esc(it.id)}">Delete</button></div>`).join('') : '<p class="muted">Nothing here.</p>';
+}
+function purgeUser(id) {
+  ['posts', 'reels', 'statuses', 'products'].forEach(k => {
+    const all = load(k); all.filter(x => x.user_id === id).forEach(dropMedia); save(k, all.filter(x => x.user_id !== id));
+  });
+  ['posts', 'reels'].forEach(k => { const all = load(k); all.forEach(x => { x.comments = (x.comments || []).filter(c => c.user_id !== id); }); save(k, all); });
+  save('likes', load('likes').filter(l => l.user_id !== id));
+  save('follows', load('follows').filter(f => f.follower_id !== id && f.following_id !== id));
+  save('monetization', load('monetization').filter(r => r.user_id !== id));
+  save('strikes', load('strikes').filter(s => s.user_id !== id));
+  save('payouts', load('payouts').filter(p => p.user_id !== id));
+  save('view_log', load('view_log').filter(v => v.owner_id !== id && v.viewer_id !== id));
+  save('favorites', load('favorites').filter(f => f.user_id !== id).map(f => ({ user_id: f.user_id, ids: (f.ids || []).filter(x => x !== id) })));
+  save('groups', load('groups').filter(g => g.owner_id !== id).map(g => Object.assign({}, g, { members: (g.members || []).filter(m => m !== id) })));
+  save('users', load('users').filter(u => u.id !== id));
+}
+
+/* =====================================================================
+   EVENTS
+   ===================================================================== */
+document.addEventListener('click', e => {
+  if (e.target.id === 'sheet') return closeSheet();
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const d = el.dataset;
+  switch (d.act) {
+    case 'nav': {
+      const tab = d.tab || (d.page === 'groups' ? null : 'posts');
+      go(d.page === 'profile' ? 'profile' : d.page, null, tab, { replace: true });
+      closeSheet();
+      break;
+    }
+    case 'account-menu': openAccountMenu(); break;
+    case 'accounts-open': openAccountsSheet(); break;
+    case 'account-switch': switchAccount(d.id); break;
+    case 'account-forget': forgetAccount(d.id); openAccountsSheet(); toast('Account removed from this device list.'); break;
+    case 'account-add': addAnotherAccount(); break;
+    case 'group-create': openCreateGroup(); break;
+    case 'group-create-save': saveCreateGroup(); break;
+    case 'group-open': go('groups', d.id); break;
+    case 'group-join': joinGroup(d.id); break;
+    case 'group-leave': leaveGroup(d.id); break;
+    case 'group-delete': deleteGroup(d.id); break;
+    case 'group-post': openGroupPost(d.id); break;
+    case 'group-post-save': saveGroupPost(d.id); break;
+    case 'fav-toggle': toggleFavorite(d.id); break;
+    case 'create': openUpload('post'); break;
+    case 'mon-open': closeSheet(); go('profile', null, 'monetization'); { const tb = $('.tabs'); if (tb) tb.scrollIntoView(); } break;
+    case 'mon-apply-open': openApply(); break;
+    case 'mon-apply-send': submitApply(); break;
+    case 'mon-payout-open': openPayoutDetails(); break;
+    case 'mon-payout-save': savePayoutDetails(); break;
+    case 'mon-request-payout': requestPayout(); break;
+    case 'mon-decide': monDecide(d.id, d.v); break;
+    case 'mon-reject-open': openReject(d.id); break;
+    case 'mon-reject-send': monReject(d.id); break;
+    case 'mon-paid': monMarkPaid(d.id); break;
+    case 'create-photo': openUpload('post'); { const f = $('#up-file'); if (f) f.click(); } break;
+    case 'follow-inline': followInline(d.id); break;
+    case 'hero-toggle': localStorage.setItem('nc_hero', heroMode() === 'mini' ? 'open' : 'mini'); paintHero(true); break;
+    case 'reel-open': openReelViewer(d.id); break;
+    case 'rv-close': closeReelViewer(); break;
+    case 'rv-sound': rvMuted = !rvMuted; syncRvSound(); break;
+    case 'rv-tap': { const v = $('video', el.parentElement); if (v && v.src) { if (v.paused) v.play().catch(() => {}); else v.pause(); } break; }
+    case 'theme': toggleTheme(); break;
+    case 'auth-tab': switchAuthTab(d.tab); break;
+    case 'demo-fill': $('#login-email').value = d.email; $('#login-password').value = d.pass; break;
+    case 'close-sheet': closeSheet(); break;
+    case 'up-type': if (up.type !== d.t) { up.text = ($('#up-text') || {}).value || up.text; up.type = d.t; if (up.file) { if (up.url) URL.revokeObjectURL(up.url); up.url = null; up.file = null; } renderUpFields(); } break;
+    case 'up-remove': if (up.url) URL.revokeObjectURL(up.url); up.url = null; up.file = null; $('#up-media').innerHTML = dropHTML(up.type); break;
+    case 'up-publish': submitUpload(); break;
+    case 'chip': if (d.f === 'store') go('store'); else startFeed(d.f); break;
+    case 'reminder-next': reminderShift++; updateHero(false); break;
+    case 'prayer-sheet': openPrayerSheet(); break;
+    case 'prayer-asr': setPrayerPrefs({ asr: +d.v }); updateHero(false); openPrayerSheet(); break;
+    case 'prayer-loc': useMyLocation(); break;
+    case 'like': toggleLike(d.type, d.id); break;
+    case 'comments': toggleComments(d.type, d.id); break;
+    case 'rv-comments': openReelComments(d.type || 'reel', d.id); break;
+    case 'comment-send': sendComment(d.type, d.id); break;
+    case 'comment-reply': { const box = el.closest('.comments'); box.dataset.reply = JSON.stringify({ id: d.cid, name: d.name }); const id = box.id.slice(3), type = box.querySelector('[data-act="comment-send"]').dataset.type; renderThread(type, id); box.querySelector('input').focus(); break; }
+    case 'comment-cancel': { const box = document.getElementById('cm-' + d.id); delete box.dataset.reply; renderThread(d.type, d.id); break; }
+    case 'share': openShare(d.type, d.id); break;
+    case 'share-feed': shareToFeed(d.type, d.id); break;
+    case 'copy-link': (navigator.clipboard ? navigator.clipboard.writeText(d.url) : Promise.reject()).then(() => toast('Link copied.'), () => toast('Could not copy. Long-press the address bar instead.')); break;
+    case 'native-share': navigator.share({ title: 'NoorChat', text: 'Check this on NoorChat', url: d.url }).catch(() => {}); break;
+    case 'item-menu': openItemMenu(d.type, d.id); break;
+    case 'report': openReport(d.type, d.id); break;
+    case 'report-send': sendReport(d.type, d.id); break;
+    case 'delete-item': deleteItem(d.type, d.id); break;
+    case 'download-item': downloadItem(d.type, d.id); break;
+    case 'story-download': {
+      const s = sv.groups[sv.gi] && sv.groups[sv.gi].list[sv.si];
+      if (s) downloadItem('status', s.id);
+      break;
+    }
+    case 'story-report': {
+      const s = sv.groups[sv.gi] && sv.groups[sv.gi].list[sv.si];
+      if (s) openReport('status', s.id);
+      break;
+    }
+    case 'open-user': if (d.id) go('profile', d.id); break;
+    case 'follow': toggleFollow(d.id); break;
+    case 'edit-profile': openEditProfile(); break;
+    case 'save-profile': saveProfile(); break;
+    case 'logout': logout(); break;
+    case 'upgrade': closeSheet(); openUpgrade(); break;
+    case 'pay': payPremium(); break;
+    case 'profile-tab': view.tab = d.tab; pushNav(null, true); render(); break;
+    case 'store-add': openUpload('product'); break;
+    case 'story-add': openUpload('status'); break;
+    case 'story-open': openStory(d.uid); break;
+    case 'story-close': closeStory(); break;
+    case 'story-prev': prevStory(); break;
+    case 'story-next': nextStory(); break;
+    case 'story-like': likeStory(); break;
+    case 'story-delete': deleteStory(); break;
+    case 'reel-tap': { const v = $('video', el); if (v && v.src) { if (v.paused) v.play().catch(() => {}); else v.pause(); } break; }
+    case 'reel-sound': { const v = $('video', el.closest('.media')); if (v) { v.muted = !v.muted; el.innerHTML = icon(v.muted ? 'mute' : 'vol', 'sm'); } break; }
+    case 'admin-tab': adminUI.tab = d.tab; render(); break;
+    case 'admin-user-toggle': { const us = load('users'), u = us.find(x => x.id === d.id); if (u && !isAdmin(u)) { u.is_active = !u.is_active; save('users', us); renderAdminUsers(); toast(u.is_active ? 'User activated.' : 'User deactivated.'); } break; }
+    case 'admin-user-delete': { const u = load('users').find(x => x.id === d.id); if (u && !isAdmin(u) && confirm(`Delete ${u.name} and all their content permanently?`)) { purgeUser(d.id); render(); toast('User deleted.'); } break; }
+    case 'admin-content-delete': if (confirm('Delete this content permanently? The creator gets a policy strike.')) { removeForPolicy(d.type, d.id, 'Removed by a moderator'); render(); toast('Content removed.'); } break;
+    case 'report-resolve': {
+      const rs = load('reports'), r = rs.find(x => x.id === d.id); if (!r) break;
+      if (d.v === 'remove') removeForPolicy(r.target_type, r.target_id, r.reason || 'Policy violation');
+      else { r.status = 'dismissed'; save('reports', rs); }
+      render(); toast(d.v === 'remove' ? 'Content removed.' : 'Report closed. Content kept.'); break;
+    }
+  }
+});
+document.addEventListener('submit', e => {
+  if (e.target.id === 'login-form') handleLogin(e);
+  else if (e.target.id === 'register-form') handleRegister(e);
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'up-file') { const f = e.target.files && e.target.files[0]; e.target.value = ''; handleFile(f); }
+  else if (e.target.id === 'adm-f') { adminUI.filter = e.target.value; renderAdminUsers(); }
+  else if (e.target.id === 'ep-avatar') {
+    const f = e.target.files && e.target.files[0]; e.target.value = '';
+    if (!f) return;
+    if (!f.type.startsWith('image/')) return toast('Please choose a photo.');
+    window.__epAvatarFile = f;
+    const url = URL.createObjectURL(f);
+    const wrap = $('#ep-av-wrap');
+    if (wrap) wrap.innerHTML = `<span class="avatar lg"><img alt="" src="${url}"></span>`;
+    toast('Photo selected. Tap Save changes to apply.');
+  }
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'up-text') up.text = e.target.value;
+  else if (e.target.id === 'adm-q') { adminUI.q = e.target.value.trim(); renderAdminUsers(); }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.matches('.composer input')) { e.preventDefault(); const b = e.target.parentElement.querySelector('[data-act="comment-send"]'); if (b) b.click(); }
+  else if (e.key === 'Escape') { if (!$('#sheet').hidden) closeSheet(); else if (!$('#reelview').hidden) closeReelViewer(); else if (!$('#story').hidden) closeStory(); }
+  else if (!$('#story').hidden && e.key === 'ArrowRight') nextStory();
+  else if (!$('#story').hidden && e.key === 'ArrowLeft') prevStory();
+});
+['dragover', 'dragleave', 'drop'].forEach(ev => document.addEventListener(ev, e => {
+  const z = e.target.closest && e.target.closest('#up-drop'); if (!z) return;
+  e.preventDefault();
+  if (ev === 'dragover') z.classList.add('over'); else z.classList.remove('over');
+  if (ev === 'drop' && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+}));
+
+/* =====================================================================
+   BOOT
+   ===================================================================== */
+initDB();
+(function dropExpiredStatuses() {
+  const all = load('statuses'), keep = all.filter(s => new Date(s.expires_at) > new Date());
+  if (keep.length !== all.length) { all.filter(s => !keep.includes(s)).forEach(dropMedia); save('statuses', keep); }
+})();
+syncThemeIcon();
+(function restoreSession() {
+  const id = localStorage.getItem('nc_session'); if (!id) return;
+  const u = load('users').find(x => x.id === id);
+  if (u && u.is_active) { currentUser = u; enterApp(); }
+})();
+</script>
+</body>
+</html>
